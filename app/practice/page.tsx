@@ -248,10 +248,6 @@ export default function PracticePage() {
                 <span className={`text-base font-medium ${isAnswered && isCorrect ? 'text-[#97C459]' : isAnswered && isChosen ? 'text-red-400' : 'text-white'}`}>
                   {opt.text}
                 </span>
-                <span className={`text-xs mt-1 ${isAnswered && isCorrect ? 'text-[#3B6D11]' : 'text-gray-500'}`}>
-                  {opt.meaning}
-                </span>
-                <span className="text-[10px] text-gray-700 mt-0.5">{opt.origin}</span>
               </button>
             )
           })}
