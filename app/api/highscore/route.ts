@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   if (!date) return NextResponse.json({ error: 'Missing date' }, { status: 400 })
 
   const { data, error } = await supabase
-    .from('highscores')
+    .from('edamamogy_highscores')
     .select('*')
     .eq('date', date)
     .maybeSingle()
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { data: existing } = await supabase
-    .from('highscores')
+    .from('edamamogy_highscores')
     .select('score')
     .eq('date', date)
     .maybeSingle()
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
 
   if (isNewRecord) {
     const { error } = await supabase
-      .from('highscores')
+      .from('edamamogy_highscores')
       .upsert({ date, score, set_at, puzzles, updated_at: new Date().toISOString() }, { onConflict: 'date' })
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
