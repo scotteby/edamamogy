@@ -9,7 +9,7 @@ A daily word etymology game. Combine Latin and Greek root beans to build words.
 Create a new Supabase project and run this SQL in the SQL Editor:
 
 ```sql
-create table highscores (
+create table edamamogy_highscores (
   id bigint generated always as identity primary key,
   date text not null unique,
   score integer not null default 0,
@@ -18,11 +18,11 @@ create table highscores (
   updated_at timestamp with time zone default now()
 );
 
-alter table highscores enable row level security;
+alter table edamamogy_highscores enable row level security;
 
-create policy "Allow public read" on highscores for select using (true);
-create policy "Allow public insert" on highscores for insert with check (true);
-create policy "Allow public update" on highscores for update using (true);
+create policy "Allow public read" on edamamogy_highscores for select using (true);
+create policy "Allow public insert" on edamamogy_highscores for insert with check (true);
+create policy "Allow public update" on edamamogy_highscores for update using (true);
 ```
 
 ### 2. Environment variables
