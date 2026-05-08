@@ -151,3 +151,4 @@ Rules:
       puzzles: SAMPLE_PUZZLES 
     })
   }
+}
