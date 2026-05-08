@@ -121,15 +121,27 @@ Rules:
     const parsed = JSON.parse(text)
     const puzzles = parsed.puzzles
 
-    // Save to Supabase with ai_generated: true so we reuse today's set
-    await supabase
+    const { error: upsertError } = await supabase
       .from('edamamogy_highscores')
       .upsert(
         { date: TODAY, score: 0, set_at: '', puzzles, ai_generated: true, updated_at: new Date().toISOString() },
         { onConflict: 'date' }
       )
 
-    return NextResponse.json({ puzzles })
+    if (upsertError) {
+      console.error('Supabase upsert error:', upsertError)
+    }
+
+    // Temporarily return debug info
+    return NextResponse.json({ 
+      puzzles,
+      debug: {
+        source: 'claude_api',
+        model: json.model,
+        firstWord: puzzles[0]?.answer,
+        upsertError: upsertError?.message || null
+      }
+    })
   } catch (e: any) {
     console.error('Question generation failed:', e.message)
     return NextResponse.json({ puzzles: SAMPLE_PUZZLES })
