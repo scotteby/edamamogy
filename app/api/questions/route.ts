@@ -34,4 +34,6 @@ export async function GET() {
     return NextResponse.json({ raw: JSON.parse(responseText) })
 
   } catch (e: any) {
-    return NextResponse
+    return NextResponse.json({ error: e.message })
+  }
+}
