@@ -31,9 +31,9 @@ export async function GET() {
       would_use_cache: !!(existing?.puzzles?.length && existing?.ai_generated)
     })
     
-    if (existing?.puzzles?.length && existing?.ai_generated) {
-      return NextResponse.json({ puzzles: existing.puzzles, source: 'cache' })
-    }
+    if (existing && existing.puzzles?.length && existing.ai_generated) {
+  return NextResponse.json({ puzzles: existing.puzzles, source: 'cache' })
+}
 
     const prompt = `Generate 5 etymology word puzzles for a daily word game called Edamamogy (${DATE_STR}).
 
