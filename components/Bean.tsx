@@ -21,9 +21,6 @@ export default function Bean({ root, used, onClick }: BeanProps) {
       <span className={`text-sm font-medium ${used ? 'text-gray-500' : 'text-[#97C459]'}`}>
         {root.text}
       </span>
-      <span className={`text-[10px] mt-0.5 ${used ? 'text-gray-600' : 'text-[#3B6D11]'}`}>
-        {root.meaning}
-      </span>
     </button>
   )
 }
