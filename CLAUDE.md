@@ -4,7 +4,7 @@ A daily word etymology game where players combine Latin/Greek root "beans" to bu
 
 ## Stack
 - Framework: Next.js 14 App Router, TypeScript strict
-- Database: Supabase (highscores table)
+- Database: Supabase (edamamogy_highscores table)
 - Styling: Tailwind CSS, dark theme (#0a0e1a background)
 - Hosting: Vercel
 
@@ -12,9 +12,9 @@ A daily word etymology game where players combine Latin/Greek root "beans" to bu
 - **Daily game** (`/game`) — Concept 1: tap beans to assemble all roots in correct order
 - **Practice mode** (`/practice`) — Concept 2: one root is hidden, pick it from 4 options
 
-## Supabase table: highscores
+## Supabase table: edamamogy_highscores
 ```sql
-create table highscores (
+create table edamamogy_highscores (
   id bigint generated always as identity primary key,
   date text not null unique,
   score integer not null default 0,
