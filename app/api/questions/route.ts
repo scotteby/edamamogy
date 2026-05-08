@@ -17,6 +17,16 @@ const DATE_STR = new Date().toLocaleDateString('en-US', {
 })
 
 export async function GET() {
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json({
+      error: 'missing env vars',
+      has_supabase_url: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+      has_supabase_key: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      has_anthropic_key: !!process.env.ANTHROPIC_API_KEY,
+    })
+  }
+  
   // Check if we already have AI-generated puzzles for today
   const { data: existing } = await supabase
     .from('edamamogy_highscores')
