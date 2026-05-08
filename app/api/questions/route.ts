@@ -142,8 +142,12 @@ Rules:
         upsertError: upsertError?.message || null
       }
     })
-  } catch (e: any) {
+ } catch (e: any) {
     console.error('Question generation failed:', e.message)
-    return NextResponse.json({ puzzles: SAMPLE_PUZZLES })
+    // Temporarily return the error so we can see it
+    return NextResponse.json({ 
+      error: e.message, 
+      stack: e.stack?.split('\n').slice(0, 3),
+      puzzles: SAMPLE_PUZZLES 
+    })
   }
-}
