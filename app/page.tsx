@@ -11,7 +11,7 @@ export default function Home() {
   useEffect(() => {
     async function loadHS() {
       const today = getLocalDate()
-      const { data } = await supabase.from('highscores').select('score,set_at').eq('date', today).maybeSingle()
+      const { data } = await supabase.from('edamamogy_highscores').select('score,set_at').eq('date', today).maybeSingle()
       if (data) setHighscore(data)
     }
     loadHS()
