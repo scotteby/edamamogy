@@ -31,9 +31,6 @@ export default function Pod({ slots, totalSlots, revealed, answer, onRemove }: P
                 <span className={`text-sm font-medium ${revealed ? 'text-[#27500A]' : 'text-[#97C459]'}`}>
                   {root.text}
                 </span>
-                <span className={`text-[10px] ${revealed ? 'text-[#3B6D11]' : 'text-[#3B6D11]/70'}`}>
-                  {root.meaning}
-                </span>
               </button>
             ) : (
               <div className="flex flex-col items-center px-4 py-1.5 rounded-full border-[1.5px] border-dashed border-[#3B6D11]/40 min-w-[72px]">
