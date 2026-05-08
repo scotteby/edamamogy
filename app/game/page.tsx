@@ -36,34 +36,36 @@ export default function GamePage() {
 
   useEffect(() => { loadGame() }, [])
 
-  async function loadGame() {
-    try {
-      // Check if today's puzzles already exist in Supabase
-      const { data: existing } = await supabase
-        .from('highscores').select('*').eq('date', today).maybeSingle()
+async function loadGame() {
+  try {
+    // Load high score from Supabase separately
+    const { data: existing } = await supabase
+      .from('edamamogy_highscores')
+      .select('score, set_at, puzzles')
+      .eq('date', today)
+      .maybeSingle()
 
-      let loadedPuzzles: Puzzle[]
-
-      if (existing?.puzzles?.length) {
-        loadedPuzzles = existing.puzzles
-        if (existing.score) setHighscore({ score: existing.score, setAt: existing.set_at })
-      } else {
-        const res = await fetch('/api/questions')
-        const json = await res.json()
-        loadedPuzzles = json.puzzles
-      }
-
-      setPuzzles(loadedPuzzles)
-      initPuzzle(loadedPuzzles[0])
-      setScreen('game')
-    } catch {
-      const res = await fetch('/api/questions')
-      const json = await res.json()
-      setPuzzles(json.puzzles)
-      initPuzzle(json.puzzles[0])
-      setScreen('game')
+    if (existing?.score) {
+      setHighscore({ score: existing.score, setAt: existing.set_at })
     }
+
+    // Always fetch fresh puzzles from the API
+    // The API route handles caching in Supabase internally
+    const res = await fetch('/api/questions')
+    const json = await res.json()
+    const loadedPuzzles: Puzzle[] = json.puzzles
+
+    setPuzzles(loadedPuzzles)
+    initPuzzle(loadedPuzzles[0])
+    setScreen('game')
+  } catch {
+    const res = await fetch('/api/questions')
+    const json = await res.json()
+    setPuzzles(json.puzzles)
+    initPuzzle(json.puzzles[0])
+    setScreen('game')
   }
+}
 
   function initPuzzle(puzzle: Puzzle) {
     setSlots(Array(puzzle.roots.length).fill(null))
