@@ -24,6 +24,13 @@ export async function GET() {
       .eq('date', TODAY)
       .maybeSingle()
 
+     return NextResponse.json({ 
+      today: TODAY,
+      existing_ai: existing?.ai_generated,
+      existing_has_puzzles: !!existing?.puzzles?.length,
+      would_use_cache: !!(existing?.puzzles?.length && existing?.ai_generated)
+    })
+    
     if (existing?.puzzles?.length && existing?.ai_generated) {
       return NextResponse.json({ puzzles: existing.puzzles, source: 'cache' })
     }
