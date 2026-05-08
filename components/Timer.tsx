@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 interface TimerProps {
   maxTime: number
@@ -10,14 +10,23 @@ interface TimerProps {
 
 export default function Timer({ maxTime, running, onExpire, resetKey }: TimerProps) {
   const [timeLeft, setTimeLeft] = useState(maxTime)
+  const hasCountedRef = useRef(false)
 
   useEffect(() => {
     setTimeLeft(maxTime)
+    hasCountedRef.current = false
   }, [resetKey, maxTime])
 
   useEffect(() => {
     if (!running) return
-    if (timeLeft <= 0) { onExpire(); return }
+    if (timeLeft <= 0) {
+      if (hasCountedRef.current) {
+        hasCountedRef.current = false
+        onExpire()
+      }
+      return
+    }
+    hasCountedRef.current = true
     const t = setTimeout(() => setTimeLeft(t => t - 1), 1000)
     return () => clearTimeout(t)
   }, [timeLeft, running, onExpire])
