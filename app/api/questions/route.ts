@@ -17,10 +17,6 @@ const DATE_STR = new Date().toLocaleDateString('en-US', {
 })
 
 export async function GET() {
-
-   // STEP 1 - does this appear?
-  console.log('Route hit')
-  
   // Check if we already have AI-generated puzzles for today
   const { data: existing } = await supabase
     .from('edamamogy_highscores')
@@ -39,48 +35,17 @@ export async function GET() {
 
   const prompt = `Generate 5 etymology word puzzles for a daily word game called Edamamogy (${DATE_STR}).
 
-Difficulty: AIM FOR HARDER WORDS. Mix of medium and challenging vocabulary — think GRE-level words that educated adults might not immediately recognize. Avoid obvious words like telescope, biography, telephone.
+Difficulty: AIM FOR MEDIUM difficulty. Words that educated adults will mostly recognize but not immediately know the roots of. Not too easy (avoid telephone, biography, telescope) but not GRE-level obscure either.
 
-Good examples of the difficulty level we want:
-- Pusillanimous (pusill + anim + ous) — cowardly
-- Loquacious (loqu + acious) — talkative
-- Ephemeral (epi + hemer + al) — lasting a short time
-- Concatenate (con + caten + ate) — link together in a chain
-- Perspicacious (per + spic + acious) — having a ready insight
-
-Each puzzle shows players a word definition and they must assemble the correct Latin/Greek root beans to build the word.
-
-Return ONLY valid JSON — no markdown, no backticks, no explanation:
-
-{
-  "puzzles": [
-    {
-      "id": "unique_word_id",
-      "answer": "TheWord",
-      "definition": "Clear, precise definition of the word",
-      "partOfSpeech": "noun",
-      "roots": [
-        { "id": "root1", "text": "root1", "meaning": "what it means", "origin": "Greek/Latin: sourceword" },
-        { "id": "root2", "text": "root2", "meaning": "what it means", "origin": "Greek/Latin: sourceword" }
-      ],
-      "decoys": [
-        { "id": "decoy1", "text": "decoy1", "meaning": "what it means", "origin": "Greek/Latin: sourceword" },
-        { "id": "decoy2", "text": "decoy2", "meaning": "what it means", "origin": "Greek/Latin: sourceword" },
-        { "id": "decoy3", "text": "decoy3", "meaning": "what it means", "origin": "Greek/Latin: sourceword" },
-        { "id": "decoy4", "text": "decoy4", "meaning": "what it means", "origin": "Greek/Latin: sourceword" }
-      ],
-      "etymologyFact": "Interesting 2-3 sentence fact about this word's origin and related words in common use"
-    }
-  ]
-}
-
-Rules:
-- Mix 2-root and 3-root words
-- Include at least 2 words most people would not immediately know
-- Decoys should be plausible roots from the same language family
-- Etymology facts should mention 2-3 other common words sharing the same root
-- Use the combining form of roots as they appear in the word (e.g. "graphy" not "graph", "logy" not "logos")
-- Mix categories: science, medicine, law, philosophy, psychology, literature`
+Good examples of the right difficulty level:
+- Sympathy (sym + pathy) — feeling together with someone
+- Chronicle (chron + icle) — a record of events in time
+- Geology (geo + logy) — study of the earth
+- Democracy (demo + cracy) — rule by the people
+- Microscope (micro + scope) — instrument for seeing small things
+- Aquatic (aqua + tic) — relating to water
+- Centennial (cent + ennial) — relating to a hundred years
+- Photograph (photo + graph) — writing with light`
 
   try {
     const https = require('https')
@@ -120,39 +85,37 @@ Rules:
     }
 
     const text = json.content[0].text.trim()
-      .replace(/^```json\n?/, '').replace(/^```\n?/, '').replace(/```$/, '').trim()
+      .replace(/^```json\n?/, '')
+      .replace(/^```\n?/, '')
+      .replace(/```$/, '')
+      .trim()
 
     const parsed = JSON.parse(text)
     const puzzles = parsed.puzzles
 
+    // Save to Supabase with ai_generated: true so all players share today's set
     const { error: upsertError } = await supabase
       .from('edamamogy_highscores')
       .upsert(
-        { date: TODAY, score: 0, set_at: '', puzzles, ai_generated: true, updated_at: new Date().toISOString() },
+        {
+          date: TODAY,
+          score: 0,
+          set_at: '',
+          puzzles,
+          ai_generated: true,
+          updated_at: new Date().toISOString()
+        },
         { onConflict: 'date' }
       )
 
     if (upsertError) {
-      console.error('Supabase upsert error:', upsertError)
+      console.error('Supabase upsert error:', upsertError.message)
     }
 
-    // Temporarily return debug info
-    return NextResponse.json({ 
-      puzzles,
-      debug: {
-        source: 'claude_api',
-        model: json.model,
-        firstWord: puzzles[0]?.answer,
-        upsertError: upsertError?.message || null
-      }
-    })
- } catch (e: any) {
+    return NextResponse.json({ puzzles })
+
+  } catch (e: any) {
     console.error('Question generation failed:', e.message)
-    // Temporarily return the error so we can see it
-    return NextResponse.json({ 
-      error: e.message, 
-      stack: e.stack?.split('\n').slice(0, 3),
-      puzzles: SAMPLE_PUZZLES 
-    })
+    return NextResponse.json({ puzzles: SAMPLE_PUZZLES })
   }
 }
