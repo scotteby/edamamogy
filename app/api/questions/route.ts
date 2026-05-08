@@ -17,6 +17,10 @@ const DATE_STR = new Date().toLocaleDateString('en-US', {
 })
 
 export async function GET() {
+
+   // STEP 1 - does this appear?
+  console.log('Route hit')
+  
   // Check if we already have AI-generated puzzles for today
   const { data: existing } = await supabase
     .from('edamamogy_highscores')
