@@ -189,24 +189,24 @@ export default function PracticePage() {
 
         <div className="flex items-center justify-between mb-2">
           <Link href="/" className="text-gray-600 hover:text-gray-400 text-sm">← back</Link>
-          <h1 className="text-base font-medium text-white">Practice</h1>
-          <span className="text-sm w-10" />
-        </div>
-
-        <div className="flex gap-1.5 mb-2">
-          {(['easy', 'medium', 'hard'] as Difficulty[]).map(d => (
-            <button
-              key={d}
-              onClick={() => { if (d !== difficulty) setDifficulty(d) }}
-              className={`flex-1 py-1.5 rounded-full text-sm font-medium border transition-colors ${
-                difficulty === d
-                  ? 'bg-[#3B6D11] border-[#3B6D11] text-[#EAF3DE]'
-                  : 'border-white/10 text-gray-500 hover:border-white/20 hover:text-gray-400'
-              }`}
-            >
-              {d}
-            </button>
-          ))}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500">Practice</span>
+            <div className="flex gap-1">
+              {(['easy', 'medium', 'hard'] as Difficulty[]).map(d => (
+                <button
+                  key={d}
+                  onClick={() => { if (d !== difficulty) setDifficulty(d) }}
+                  className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
+                    difficulty === d
+                      ? 'bg-[#3B6D11] border-[#3B6D11] text-[#EAF3DE]'
+                      : 'border-white/10 text-gray-500 hover:border-white/20 hover:text-gray-400'
+                  }`}
+                >
+                  {d}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="h-[3px] bg-white/5 rounded-full my-2">
