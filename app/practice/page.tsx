@@ -46,7 +46,7 @@ export default function PracticePage() {
   async function loadPuzzles(diff: Difficulty) {
     setLoading(true)
     const cached = consume(diff)
-    const loaded: Puzzle[] = cached ?? await fetch(`/api/questions?difficulty=${diff}`).then(r => r.json()).then(j => j.puzzles)
+    const loaded: Puzzle[] = cached ?? await fetch(`/api/practice-questions?difficulty=${diff}`).then(r => r.json()).then(j => j.puzzles)
     setPuzzles(loaded)
     setQi(0)
     setResults([])

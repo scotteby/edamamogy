@@ -10,7 +10,7 @@ export function getCached(difficulty: Difficulty): Puzzle[] | null {
 
 export function prefetch(difficulty: Difficulty): void {
   if (cache[difficulty]) return
-  fetch(`/api/questions?difficulty=${difficulty}`)
+  fetch(`/api/practice-questions?difficulty=${difficulty}`)
     .then(r => r.json())
     .then(json => { cache[difficulty] = json.puzzles })
     .catch(() => {})
