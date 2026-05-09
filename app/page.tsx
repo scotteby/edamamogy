@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { supabase, getLocalDate } from '@/lib/supabase'
 import { maxPossibleScore, MAX_TIME, PUZZLES_PER_DAY } from '@/lib/scoring'
+import { prefetch } from '@/lib/practiceCache'
 
 export default function Home() {
   const [highscore, setHighscore] = useState<{ score: number; set_at: string } | null>(null)
@@ -15,6 +16,7 @@ export default function Home() {
       if (data) setHighscore(data)
     }
     loadHS()
+    prefetch('medium')
   }, [])
 
   return (

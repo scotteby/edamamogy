@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { Puzzle, Root } from '@/types'
 import { calcScore, maxPossibleScore, scoreEmoji, scoreMessage, MAX_TIME, PUZZLES_PER_DAY } from '@/lib/scoring'
+import { consume } from '@/lib/practiceCache'
 import EtymologyCard from '@/components/EtymologyCard'
 import ProgressDots from '@/components/ProgressDots'
 import Timer from '@/components/Timer'
@@ -44,9 +45,8 @@ export default function PracticePage() {
 
   async function loadPuzzles(diff: Difficulty) {
     setLoading(true)
-    const res = await fetch(`/api/questions?difficulty=${diff}`)
-    const json = await res.json()
-    const loaded: Puzzle[] = json.puzzles
+    const cached = consume(diff)
+    const loaded: Puzzle[] = cached ?? await fetch(`/api/questions?difficulty=${diff}`).then(r => r.json()).then(j => j.puzzles)
     setPuzzles(loaded)
     setQi(0)
     setResults([])
