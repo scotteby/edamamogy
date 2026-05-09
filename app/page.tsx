@@ -89,7 +89,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <p className="text-center text-sm mt-6" style={{ color: '#9db88a' }}>
+        <p className="text-center text-base mt-6" style={{ color: '#9db88a' }}>
           Build words from Latin &amp; Greek roots
         </p>
       </div>
