@@ -216,7 +216,7 @@ async function loadGame() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center px-4 py-8">
+    <main className="min-h-screen flex flex-col items-center px-4 py-4">
       <div className="w-full max-w-sm">
 
         {/* Top bar */}
@@ -227,7 +227,7 @@ async function loadGame() {
         </div>
 
         {/* Progress bar */}
-        <div className="h-[3px] bg-white/5 rounded-full my-4">
+        <div className="h-[3px] bg-white/5 rounded-full my-2">
           <div
             className="h-full bg-[#3B6D11] rounded-full transition-all duration-500"
             style={{ width: `${(qi / puzzles.length) * 100}%` }}
@@ -235,22 +235,21 @@ async function loadGame() {
         </div>
 
         {/* Meta row */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <span className="text-sm text-[#3B6D11] font-medium">Word {qi + 1} / {puzzles.length}</span>
           <ProgressDots total={PUZZLES_PER_DAY} current={qi} results={dotResults} />
           {answersRevealed && <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />}
         </div>
 
         {/* Definition card */}
-        <div className="bg-[#161d2e] border border-white/10 rounded-2xl p-4 mb-4 fade-up">
-          <p className="text-sm text-gray-600 uppercase tracking-wider mb-2">What word means...</p>
-          <p className="text-base text-white leading-relaxed">{puzzle.definition}</p>
-          <p className="text-sm text-gray-600 italic mt-2">{puzzle.partOfSpeech}</p>
+        <div className="bg-[#161d2e] border border-white/10 rounded-2xl p-3 mb-3 fade-up">
+          <p className="text-sm text-gray-600 uppercase tracking-wider mb-1">What word means...</p>
+          <p className="text-base text-white leading-snug">{puzzle.definition}</p>
+          <p className="text-sm text-gray-600 italic mt-1">{puzzle.partOfSpeech}</p>
         </div>
 
         {/* Pod */}
-        <div className="mb-4" key={`pod-${shakeKey}`}>
-          <p className="text-sm text-gray-600 uppercase tracking-wider mb-2">Build the word — tap beans to place them</p>
+        <div className="mb-3" key={`pod-${shakeKey}`}>
           <Pod
             slots={slots}
             totalSlots={puzzle.roots.length}
@@ -262,8 +261,7 @@ async function loadGame() {
 
         {/* Beans tray */}
         {answerState === 'unanswered' && answersRevealed && (
-          <div className="mb-4">
-            <p className="text-sm text-gray-600 uppercase tracking-wider mb-2">Available roots</p>
+          <div className="mb-3">
             <div className="flex flex-wrap gap-2">
               {allBeans.map(root => (
                 <Bean
@@ -279,23 +277,17 @@ async function loadGame() {
 
         {/* Feedback */}
         {feedback && (
-          <p className={`text-sm text-center mb-3 fade-up ${answerState === 'correct' ? 'text-[#97C459]' : 'text-red-400'}`}>
+          <p className={`text-sm text-center mb-2 fade-up ${answerState === 'correct' ? 'text-[#97C459]' : 'text-red-400'}`}>
             {feedback}
           </p>
         )}
 
         {/* Etymology reveal */}
         {(answerState === 'correct' || answerState === 'timeout') && (
-          <div className="mb-4">
+          <div className="mb-3">
             <EtymologyCard fact={puzzle.etymologyFact} answer={puzzle.answer} />
           </div>
         )}
-
-        {/* Score */}
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-sm text-gray-600">Score: <span className="text-[#97C459] font-medium">{totalScore}</span></span>
-          <span className="text-sm text-gray-700">Max: {maxPossibleScore()} pts</span>
-        </div>
 
         {/* Action buttons */}
         {answerState === 'unanswered' && (

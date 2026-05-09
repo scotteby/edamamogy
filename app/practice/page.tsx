@@ -176,7 +176,7 @@ export default function PracticePage() {
   const wordWithBlank = puzzle.roots.map((r, i) => i === missingIndex ? '___' : r.text).join(' + ')
 
   return (
-    <main className="min-h-screen flex flex-col items-center px-4 py-8">
+    <main className="min-h-screen flex flex-col items-center px-4 py-4">
       <div className="w-full max-w-sm">
 
         <div className="flex items-center justify-between mb-1">
@@ -185,19 +185,19 @@ export default function PracticePage() {
           <div className="text-sm text-[#3B6D11]">easy mode</div>
         </div>
 
-        <div className="h-[3px] bg-white/5 rounded-full my-4">
+        <div className="h-[3px] bg-white/5 rounded-full my-2">
           <div className="h-full bg-[#3B6D11] rounded-full transition-all duration-500"
             style={{ width: `${(qi / puzzles.length) * 100}%` }} />
         </div>
 
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <span className="text-sm text-[#3B6D11] font-medium">Word {qi + 1} / {puzzles.length}</span>
           <ProgressDots total={PUZZLES_PER_DAY} current={qi} results={dotResults} />
           {answersRevealed && <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />}
         </div>
 
         {/* Pod display — show assembled word with blank */}
-        <div className="bg-[#111827] border border-white/10 rounded-full px-5 py-3.5 flex items-center justify-center gap-2 min-h-[68px] mb-4 flex-wrap">
+        <div className="bg-[#111827] border border-white/10 rounded-full px-5 py-3 flex items-center justify-center gap-2 min-h-[60px] mb-3 flex-wrap">
           {puzzle.roots.map((r, i) => (
             <div key={i} className="flex items-center gap-2">
               {i === missingIndex ? (
@@ -234,15 +234,15 @@ export default function PracticePage() {
         </div>
 
         {/* Clue card */}
-        <div className="bg-[#161d2e] border border-white/10 rounded-2xl p-4 mb-4">
-          <p className="text-sm text-gray-600 uppercase tracking-wider mb-2">The missing root means...</p>
+        <div className="bg-[#161d2e] border border-white/10 rounded-2xl p-3 mb-3">
+          <p className="text-sm text-gray-600 uppercase tracking-wider mb-1">The missing root means...</p>
           <p className="text-base text-white">{missingRoot.meaning}</p>
-          <p className="text-sm text-gray-600 italic mt-1">{missingRoot.origin}</p>
+          <p className="text-sm text-gray-600 italic mt-0.5">{missingRoot.origin}</p>
         </div>
 
         {/* Option beans */}
         {answersRevealed && (
-          <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="grid grid-cols-2 gap-2 mb-3">
             {options.map(opt => {
               const isCorrect = opt.id === missingRoot.id
               const isChosen = opt.id === chosenId
@@ -255,7 +255,7 @@ export default function PracticePage() {
                   key={opt.id}
                   onClick={() => selectOption(opt)}
                   disabled={isAnswered}
-                  className={`flex flex-col items-center p-4 rounded-2xl border-[1.5px] transition-all bean ${cls} ${!isAnswered ? 'hover:border-[#3B6D11]/60 hover:bg-[#1a2e0a]/40' : ''}`}
+                  className={`flex flex-col items-center p-3 rounded-2xl border-[1.5px] transition-all bean ${cls} ${!isAnswered ? 'hover:border-[#3B6D11]/60 hover:bg-[#1a2e0a]/40' : ''}`}
                 >
                   <span className={`text-base font-medium ${isAnswered && isCorrect ? 'text-[#97C459]' : isAnswered && isChosen ? 'text-red-400' : 'text-white'}`}>
                     {opt.text}
@@ -267,13 +267,13 @@ export default function PracticePage() {
         )}
 
         {feedback && (
-          <p className={`text-sm text-center mb-3 fade-up ${answerState === 'correct' ? 'text-[#97C459]' : 'text-red-400'}`}>
+          <p className={`text-sm text-center mb-2 fade-up ${answerState === 'correct' ? 'text-[#97C459]' : 'text-red-400'}`}>
             {feedback}
           </p>
         )}
 
         {(answerState === 'correct' || answerState === 'wrong' || answerState === 'timeout') && (
-          <div className="mb-4">
+          <div className="mb-3">
             <EtymologyCard fact={puzzle.etymologyFact} answer={puzzle.answer} />
           </div>
         )}
