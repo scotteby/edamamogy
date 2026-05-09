@@ -4,6 +4,9 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Edamamogy — daily word origins game',
   description: 'Combine Latin and Greek root beans to build words. A daily etymology puzzle game.',
+  icons: {
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+  },
   openGraph: {
     title: 'Edamamogy — daily word origins game',
     description: 'Combine Latin and Greek root beans to build words. A daily etymology puzzle game.',
