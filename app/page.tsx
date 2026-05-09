@@ -18,11 +18,11 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
+    <main className="min-h-screen flex flex-col items-center justify-center px-4 py-6">
       <div className="w-full max-w-sm">
 
         {/* Header */}
-        <div className="text-center mb-10 fade-up">
+        <div className="text-center mb-8 fade-up">
           <h1 className="text-3xl font-medium text-white mb-1">Edamamogy</h1>
           <p className="text-sm text-gray-500 tracking-wide">word origins, daily</p>
           <p className="text-sm text-green-400 mt-2">{dateStr}</p>
@@ -32,7 +32,7 @@ export default function Home() {
         <div className="bg-[#161d2e] border border-white/10 rounded-2xl p-4 mb-6 flex items-center justify-between fade-up">
           <div>
             <p className="text-sm text-gray-500 mb-1">Today's high score</p>
-            {highscore ? (
+            {highscore?.set_at ? (
               <>
                 <p className="text-xl font-medium text-green-400">{highscore.score} / {maxPossibleScore()}</p>
                 <p className="text-sm text-gray-600 mt-1">Set at {highscore.set_at}</p>

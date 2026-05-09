@@ -1,5 +1,5 @@
 export const MAX_TIME = 30
-export const BASE_PTS = 10
+export const BASE_PTS = 15
 export const MAX_BONUS = 5
 export const PUZZLES_PER_DAY = 5
 
