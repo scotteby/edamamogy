@@ -37,9 +37,20 @@ export async function GET(request: Request) {
       return NextResponse.json({ puzzles: data.puzzles, source: 'pool' })
     }
 
-    // Pool empty — generate on the fly
+    // Pool empty — generate on the fly, avoiding recently used words
     try {
-      const puzzles = await generatePuzzles(difficulty)
+      const { data: recentRows } = await supabase
+        .from('practice_puzzles')
+        .select('puzzles')
+        .eq('difficulty', difficulty)
+        .order('created_at', { ascending: false })
+        .limit(5)
+
+      const excludeWords = (recentRows ?? []).flatMap((row: any) =>
+        (row.puzzles as any[]).map((p: any) => p.answer)
+      )
+
+      const puzzles = await generatePuzzles(difficulty, excludeWords)
       return NextResponse.json({ puzzles, source: 'live' })
     } catch {
       return NextResponse.json({ puzzles: SAMPLE_PUZZLES, source: 'sample' })

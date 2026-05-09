@@ -42,11 +42,15 @@ Aim for this level (do NOT use these exact words as answers — they are only ex
 Choose 5 DIFFERENT words at this same level. Be creative — there are thousands of good options.`,
 }
 
-export async function generatePuzzles(difficulty: Difficulty): Promise<Puzzle[]> {
+export async function generatePuzzles(difficulty: Difficulty, excludeWords: string[] = []): Promise<Puzzle[]> {
+  const excludeClause = excludeWords.length > 0
+    ? `\nDo NOT use any of these recently used words as answers: ${excludeWords.join(', ')}\n`
+    : ''
+
   const prompt = `Generate 5 etymology word puzzles for a daily word game called Edamamogy (${DATE_STR}).
 
 ${DIFFICULTY_BLOCKS[difficulty]}
-
+${excludeClause}
 Return ONLY valid JSON — no markdown, no backticks, no explanation:
 
 {
@@ -72,6 +76,7 @@ Return ONLY valid JSON — no markdown, no backticks, no explanation:
 }
 
 Rules:
+- All 5 puzzles MUST use completely different answer words — no word may appear more than once in this set
 - Mix 2-root and 3-root words
 - Decoys should be plausible roots from the same language family
 - Etymology facts should mention 2-3 other common words sharing the same root

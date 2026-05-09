@@ -34,9 +34,25 @@ export async function GET(request: Request) {
 
     results[difficulty] = 0
 
+    // Collect words already in the pool to avoid repeats
+    const { data: existingRows } = await supabase
+      .from('practice_puzzles')
+      .select('puzzles')
+      .eq('difficulty', difficulty)
+      .order('created_at', { ascending: false })
+      .limit(10)
+
+    const usedWords = (existingRows ?? []).flatMap((row: any) =>
+      (row.puzzles as any[]).map((p: any) => p.answer)
+    )
+
+    const wordsThisBatch: string[] = []
+
     for (let i = 0; i < toGenerate; i++) {
       try {
-        const puzzles = await generatePuzzles(difficulty)
+        const excludeWords = [...usedWords, ...wordsThisBatch]
+        const puzzles = await generatePuzzles(difficulty, excludeWords)
+        wordsThisBatch.push(...puzzles.map(p => p.answer))
         await supabase
           .from('practice_puzzles')
           .insert({ difficulty, puzzles, used: false })
