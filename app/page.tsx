@@ -25,7 +25,7 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-4 py-6" style={{ background: '#f5f7f2' }}>
+    <main className="flex flex-col items-center justify-center px-4 py-6" style={{ background: '#f5f7f2', minHeight: '100dvh' }}>
       <div className="w-full max-w-sm">
 
         {/* Header */}
