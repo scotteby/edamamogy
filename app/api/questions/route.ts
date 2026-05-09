@@ -20,11 +20,11 @@ export async function GET() {
   try {
     const { data: existing } = await supabase
       .from('edamamogy_highscores')
-      .select('puzzles, ai_generated')
+      .select('puzzles')
       .eq('date', TODAY)
       .maybeSingle()
 
-     if (existing && existing.puzzles?.length && existing.ai_generated) {
+    if (existing?.puzzles?.length) {
       return NextResponse.json({ puzzles: existing.puzzles, source: 'cache' })
     }
     
@@ -114,12 +114,16 @@ Rules:
 
     const puzzles = JSON.parse(text).puzzles
 
-    await supabase
-      .from('edamamogy_highscores')
-      .upsert(
-        { date: TODAY, score: 0, set_at: '', puzzles, ai_generated: true, updated_at: new Date().toISOString() },
-        { onConflict: 'date' }
-      )
+    if (existing) {
+      await supabase
+        .from('edamamogy_highscores')
+        .update({ puzzles, ai_generated: true, updated_at: new Date().toISOString() })
+        .eq('date', TODAY)
+    } else {
+      await supabase
+        .from('edamamogy_highscores')
+        .insert({ date: TODAY, score: 0, set_at: '', puzzles, ai_generated: true, updated_at: new Date().toISOString() })
+    }
 
     return NextResponse.json({ puzzles, source: 'claude' })
 
