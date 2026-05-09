@@ -6,6 +6,7 @@ import { calcScore, maxPossibleScore, scoreEmoji, scoreMessage, MAX_TIME, PUZZLE
 import EtymologyCard from '@/components/EtymologyCard'
 import ProgressDots from '@/components/ProgressDots'
 import Timer from '@/components/Timer'
+import Pod from '@/components/Pod'
 
 type AnswerState = 'unanswered' | 'correct' | 'wrong' | 'timeout'
 type Difficulty = 'easy' | 'medium' | 'hard'
@@ -179,9 +180,7 @@ export default function PracticePage() {
     )
   }
 
-  const knownRoots = puzzle.roots.filter((_, i) => i !== missingIndex)
   const missingRoot = puzzle.roots[missingIndex]
-  const wordWithBlank = puzzle.roots.map((r, i) => i === missingIndex ? '___' : r.text).join(' + ')
 
   return (
     <main className="min-h-screen flex flex-col items-center px-4 py-4">
@@ -220,41 +219,17 @@ export default function PracticePage() {
           {answersRevealed && <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />}
         </div>
 
-        {/* Pod display — show assembled word with blank */}
-        <div className="bg-[#111827] border border-white/10 rounded-full px-5 py-3 flex items-center justify-center gap-2 min-h-[60px] mb-3 flex-wrap">
-          {puzzle.roots.map((r, i) => (
-            <div key={i} className="flex items-center gap-2">
-              {i === missingIndex ? (
-                <div className={`flex flex-col items-center px-4 py-1.5 rounded-full border-[1.5px] transition-all
-                  ${answerState === 'correct' || answerState === 'timeout'
-                    ? 'bg-[#EAF3DE] border-[#3B6D11]'
-                    : 'border-dashed border-[#3B6D11]/50 bg-transparent'
-                  }`}>
-                  {answerState === 'correct' || answerState === 'timeout' ? (
-                    <>
-                      <span className="text-sm font-medium text-[#27500A]">{missingRoot.text}</span>
-                      <span className="text-xs text-[#3B6D11]">{missingRoot.meaning}</span>
-                    </>
-                  ) : (
-                    <span className="text-sm text-[#3B6D11]/40 font-medium">? ? ?</span>
-                  )}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center px-4 py-1.5 rounded-full bg-[#1a2e0a] border-[1.5px] border-[#3B6D11]">
-                  <span className="text-sm font-medium text-[#97C459]">{r.text}</span>
-                  <span className="text-xs text-[#3B6D11]">{r.meaning}</span>
-                </div>
-              )}
-              {i < puzzle.roots.length - 1 && <span className="text-gray-600 font-medium">+</span>}
-            </div>
-          ))}
-          <span className="text-gray-600 font-medium mx-1">=</span>
-          <span className="text-base font-medium">
-            {answerState === 'correct' || answerState === 'timeout'
-              ? <span className="text-white">{puzzle.answer}</span>
-              : <span className="text-gray-700">{wordWithBlank.replace(/[a-z]/g, '_')}</span>
-            }
-          </span>
+        {/* Pod */}
+        <div className="mb-3">
+          <Pod
+            slots={puzzle.roots.map((r, i) =>
+              i === missingIndex && answerState !== 'correct' && answerState !== 'timeout' ? null : r
+            )}
+            totalSlots={puzzle.roots.length}
+            revealed={answerState === 'correct' || answerState === 'timeout'}
+            answer={puzzle.answer}
+            onRemove={() => {}}
+          />
         </div>
 
         {/* Clue card */}
