@@ -31,6 +31,7 @@ export default function GamePage() {
   const [highscore, setHighscore] = useState<{ score: number; setAt: string } | null>(null)
   const [isNewRecord, setIsNewRecord] = useState(false)
   const [shakeKey, setShakeKey] = useState(0)
+  const [allBeans, setAllBeans] = useState<Root[]>([])
   const startTimeRef = useRef<number>(0)
   const today = getLocalDate()
   const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
@@ -85,6 +86,7 @@ async function loadGame() {
     setAnswersRevealed(false)
     setTimerRunning(false)
     setTimerKey(k => k + 1)
+    setAllBeans([...puzzle.roots, ...puzzle.decoys].sort(() => Math.random() - 0.5))
     startTimeRef.current = Date.now()
   }
 
@@ -191,7 +193,6 @@ async function loadGame() {
 
   const allFilled = puzzles[qi] && slots.every(s => s !== null)
   const puzzle = puzzles[qi]
-  const allBeans = puzzle ? [...puzzle.roots, ...puzzle.decoys].sort(() => Math.random() - 0.5) : []
 
   if (screen === 'loading') {
     return (
