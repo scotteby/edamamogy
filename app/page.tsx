@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { supabase, getLocalDate } from '@/lib/supabase'
-import { maxPossibleScore } from '@/lib/scoring'
+import { maxPossibleScore, MAX_TIME, PUZZLES_PER_DAY } from '@/lib/scoring'
 
 export default function Home() {
   const [highscore, setHighscore] = useState<{ score: number; set_at: string } | null>(null)
@@ -52,8 +52,8 @@ export default function Home() {
           {[
             { label: '10 pts', sub: 'correct answer' },
             { label: '+5 bonus', sub: 'answer fast' },
-            { label: '5 words', sub: 'per day' },
-            { label: '20 sec', sub: 'per puzzle' },
+            { label: `${PUZZLES_PER_DAY} words`, sub: 'per day' },
+            { label: `${MAX_TIME} sec`, sub: 'per puzzle' },
           ].map(r => (
             <div key={r.label} className="bg-[#161d2e] border border-white/10 rounded-xl p-3">
               <p className="text-sm font-medium text-green-400">{r.label}</p>
