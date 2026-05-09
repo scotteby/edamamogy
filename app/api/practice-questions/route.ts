@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { generatePuzzles } from '@/lib/generatePuzzles'
+import { SAMPLE_PUZZLES } from '@/lib/samplePuzzles'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -37,16 +38,14 @@ export async function GET(request: Request) {
     }
 
     // Pool empty — generate on the fly
-    const puzzles = await generatePuzzles(difficulty)
-    return NextResponse.json({ puzzles, source: 'live' })
-
-  } catch (e: any) {
-    // Last resort fallback — generate live
     try {
       const puzzles = await generatePuzzles(difficulty)
       return NextResponse.json({ puzzles, source: 'live' })
     } catch {
-      return NextResponse.json({ error: e.message }, { status: 500 })
+      return NextResponse.json({ puzzles: SAMPLE_PUZZLES, source: 'sample' })
     }
+
+  } catch (e: any) {
+    return NextResponse.json({ puzzles: SAMPLE_PUZZLES, source: 'sample', error: e.message })
   }
 }

@@ -1,5 +1,4 @@
 import { Puzzle } from '@/types'
-import { SAMPLE_PUZZLES } from '@/lib/samplePuzzles'
 
 export type Difficulty = 'easy' | 'medium' | 'hard'
 
@@ -104,8 +103,7 @@ Rules:
 
   const json = JSON.parse(responseText)
   if (!json.content?.[0]?.text) {
-    console.error('Unexpected Anthropic response:', JSON.stringify(json))
-    return SAMPLE_PUZZLES
+    throw new Error(`Anthropic API error: ${JSON.stringify(json).slice(0, 300)}`)
   }
 
   const text = json.content[0].text.trim()
