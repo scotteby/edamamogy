@@ -130,15 +130,15 @@ export default function PracticePage() {
           <div className="text-center mb-6">
             <p className="text-4xl mb-2">{emoji}</p>
             <p className="text-xl font-medium text-white mb-1">{msg}</p>
-            <p className="text-xs text-[#3B6D11]">Practice mode</p>
+            <p className="text-sm text-[#3B6D11]">Practice mode</p>
           </div>
           <div className="grid grid-cols-2 gap-3 mb-5">
             <div className="bg-[#161d2e] rounded-xl p-3 text-center">
-              <p className="text-[11px] text-gray-600 mb-1">Score</p>
+              <p className="text-sm text-gray-600 mb-1">Score</p>
               <p className="text-lg font-medium text-[#97C459]">{totalScore}/{max}</p>
             </div>
             <div className="bg-[#161d2e] rounded-xl p-3 text-center">
-              <p className="text-[11px] text-gray-600 mb-1">Correct</p>
+              <p className="text-sm text-gray-600 mb-1">Correct</p>
               <p className="text-lg font-medium text-white">{results.filter(r => r.correct).length}/{results.length}</p>
             </div>
           </div>
@@ -150,9 +150,9 @@ export default function PracticePage() {
                 <div key={i} className="flex items-center justify-between py-2.5 border-b border-white/5 last:border-0">
                   <div>
                     <p className="text-sm text-white">{p.answer}</p>
-                    <p className="text-xs text-gray-600">{p.roots.map(ro => ro.text).join(' + ')}</p>
+                    <p className="text-sm text-gray-600">{p.roots.map(ro => ro.text).join(' + ')}</p>
                   </div>
-                  <span className={`text-xs px-2.5 py-1 rounded-full ${r.correct ? 'bg-[#1a2e0a] text-[#97C459]' : 'bg-red-900/30 text-red-400'}`}>
+                  <span className={`text-sm px-2.5 py-1 rounded-full ${r.correct ? 'bg-[#1a2e0a] text-[#97C459]' : 'bg-red-900/30 text-red-400'}`}>
                     {r.correct ? `+${r.pts}` : '0 pts'}
                   </span>
                 </div>
@@ -182,7 +182,7 @@ export default function PracticePage() {
         <div className="flex items-center justify-between mb-1">
           <Link href="/" className="text-gray-600 hover:text-gray-400 text-sm">← back</Link>
           <h1 className="text-base font-medium text-white">Practice</h1>
-          <div className="text-xs text-[#3B6D11]">easy mode</div>
+          <div className="text-sm text-[#3B6D11]">easy mode</div>
         </div>
 
         <div className="h-[3px] bg-white/5 rounded-full my-4">
@@ -191,7 +191,7 @@ export default function PracticePage() {
         </div>
 
         <div className="flex items-center justify-between mb-4">
-          <span className="text-xs text-[#3B6D11] font-medium">Word {qi + 1} / {puzzles.length}</span>
+          <span className="text-sm text-[#3B6D11] font-medium">Word {qi + 1} / {puzzles.length}</span>
           <ProgressDots total={PUZZLES_PER_DAY} current={qi} results={dotResults} />
           {answersRevealed && <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />}
         </div>
@@ -209,7 +209,7 @@ export default function PracticePage() {
                   {answerState === 'correct' || answerState === 'timeout' ? (
                     <>
                       <span className="text-sm font-medium text-[#27500A]">{missingRoot.text}</span>
-                      <span className="text-[10px] text-[#3B6D11]">{missingRoot.meaning}</span>
+                      <span className="text-xs text-[#3B6D11]">{missingRoot.meaning}</span>
                     </>
                   ) : (
                     <span className="text-sm text-[#3B6D11]/40 font-medium">? ? ?</span>
@@ -218,7 +218,7 @@ export default function PracticePage() {
               ) : (
                 <div className="flex flex-col items-center px-4 py-1.5 rounded-full bg-[#1a2e0a] border-[1.5px] border-[#3B6D11]">
                   <span className="text-sm font-medium text-[#97C459]">{r.text}</span>
-                  <span className="text-[10px] text-[#3B6D11]">{r.meaning}</span>
+                  <span className="text-xs text-[#3B6D11]">{r.meaning}</span>
                 </div>
               )}
               {i < puzzle.roots.length - 1 && <span className="text-gray-600 font-medium">+</span>}
@@ -235,9 +235,9 @@ export default function PracticePage() {
 
         {/* Clue card */}
         <div className="bg-[#161d2e] border border-white/10 rounded-2xl p-4 mb-4">
-          <p className="text-xs text-gray-600 uppercase tracking-wider mb-2">The missing root means...</p>
+          <p className="text-sm text-gray-600 uppercase tracking-wider mb-2">The missing root means...</p>
           <p className="text-base text-white">{missingRoot.meaning}</p>
-          <p className="text-xs text-gray-600 italic mt-1">{missingRoot.origin}</p>
+          <p className="text-sm text-gray-600 italic mt-1">{missingRoot.origin}</p>
         </div>
 
         {/* Option beans */}

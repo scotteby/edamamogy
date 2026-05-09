@@ -25,22 +25,22 @@ export default function Home() {
         <div className="text-center mb-10 fade-up">
           <h1 className="text-3xl font-medium text-white mb-1">Edamamogy</h1>
           <p className="text-sm text-gray-500 tracking-wide">word origins, daily</p>
-          <p className="text-xs text-green-400 mt-2">{dateStr}</p>
+          <p className="text-sm text-green-400 mt-2">{dateStr}</p>
         </div>
 
         {/* High score banner */}
         <div className="bg-[#161d2e] border border-white/10 rounded-2xl p-4 mb-6 flex items-center justify-between fade-up">
           <div>
-            <p className="text-xs text-gray-500 mb-1">Today's high score</p>
+            <p className="text-sm text-gray-500 mb-1">Today's high score</p>
             {highscore ? (
               <>
                 <p className="text-xl font-medium text-green-400">{highscore.score} / {maxPossibleScore()}</p>
-                <p className="text-xs text-gray-600 mt-1">Set at {highscore.set_at}</p>
+                <p className="text-sm text-gray-600 mt-1">Set at {highscore.set_at}</p>
               </>
             ) : (
               <>
                 <p className="text-xl font-medium text-gray-600">—</p>
-                <p className="text-xs text-gray-700 mt-1">No games played yet</p>
+                <p className="text-sm text-gray-700 mt-1">No games played yet</p>
               </>
             )}
           </div>
@@ -57,7 +57,7 @@ export default function Home() {
           ].map(r => (
             <div key={r.label} className="bg-[#161d2e] border border-white/10 rounded-xl p-3">
               <p className="text-sm font-medium text-green-400">{r.label}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{r.sub}</p>
+              <p className="text-sm text-gray-500 mt-0.5">{r.sub}</p>
             </div>
           ))}
         </div>
@@ -78,7 +78,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <p className="text-center text-xs text-gray-700 mt-8">
+        <p className="text-center text-sm text-gray-700 mt-8">
           Build words from Latin &amp; Greek roots
         </p>
       </div>

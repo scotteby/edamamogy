@@ -223,7 +223,7 @@ async function loadGame() {
         <div className="flex items-center justify-between mb-1">
           <Link href="/" className="text-gray-600 hover:text-gray-400 text-sm">← back</Link>
           <h1 className="text-base font-medium text-white">Edamamogy</h1>
-          <div className="text-xs text-gray-600">daily</div>
+          <div className="text-sm text-gray-600">daily</div>
         </div>
 
         {/* Progress bar */}
@@ -236,21 +236,21 @@ async function loadGame() {
 
         {/* Meta row */}
         <div className="flex items-center justify-between mb-4">
-          <span className="text-xs text-[#3B6D11] font-medium">Word {qi + 1} / {puzzles.length}</span>
+          <span className="text-sm text-[#3B6D11] font-medium">Word {qi + 1} / {puzzles.length}</span>
           <ProgressDots total={PUZZLES_PER_DAY} current={qi} results={dotResults} />
           {answersRevealed && <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />}
         </div>
 
         {/* Definition card */}
         <div className="bg-[#161d2e] border border-white/10 rounded-2xl p-4 mb-4 fade-up">
-          <p className="text-xs text-gray-600 uppercase tracking-wider mb-2">What word means...</p>
+          <p className="text-sm text-gray-600 uppercase tracking-wider mb-2">What word means...</p>
           <p className="text-base text-white leading-relaxed">{puzzle.definition}</p>
-          <p className="text-xs text-gray-600 italic mt-2">{puzzle.partOfSpeech}</p>
+          <p className="text-sm text-gray-600 italic mt-2">{puzzle.partOfSpeech}</p>
         </div>
 
         {/* Pod */}
         <div className="mb-4" key={`pod-${shakeKey}`}>
-          <p className="text-xs text-gray-600 uppercase tracking-wider mb-2">Build the word — tap beans to place them</p>
+          <p className="text-sm text-gray-600 uppercase tracking-wider mb-2">Build the word — tap beans to place them</p>
           <Pod
             slots={slots}
             totalSlots={puzzle.roots.length}
@@ -263,7 +263,7 @@ async function loadGame() {
         {/* Beans tray */}
         {answerState === 'unanswered' && answersRevealed && (
           <div className="mb-4">
-            <p className="text-xs text-gray-600 uppercase tracking-wider mb-2">Available roots</p>
+            <p className="text-sm text-gray-600 uppercase tracking-wider mb-2">Available roots</p>
             <div className="flex flex-wrap gap-2">
               {allBeans.map(root => (
                 <Bean
@@ -293,8 +293,8 @@ async function loadGame() {
 
         {/* Score */}
         <div className="flex justify-between items-center mb-4">
-          <span className="text-xs text-gray-600">Score: <span className="text-[#97C459] font-medium">{totalScore}</span></span>
-          <span className="text-xs text-gray-700">Max: {maxPossibleScore()} pts</span>
+          <span className="text-sm text-gray-600">Score: <span className="text-[#97C459] font-medium">{totalScore}</span></span>
+          <span className="text-sm text-gray-700">Max: {maxPossibleScore()} pts</span>
         </div>
 
         {/* Action buttons */}
@@ -362,7 +362,7 @@ function SummaryScreen({ results, puzzles, totalScore, highscore, isNewRecord, d
             { label: 'Words correct', val: `${results.filter(r => r.correct).length}/${results.length}`, color: 'text-white' },
           ].map(c => (
             <div key={c.label} className="bg-[#161d2e] rounded-xl p-3 text-center">
-              <p className="text-[11px] text-gray-600 mb-1">{c.label}</p>
+              <p className="text-sm text-gray-600 mb-1">{c.label}</p>
               <p className={`text-lg font-medium ${c.color}`}>{c.val}</p>
             </div>
           ))}
@@ -371,16 +371,16 @@ function SummaryScreen({ results, puzzles, totalScore, highscore, isNewRecord, d
         {/* High score block */}
         {highscore && (
           <div className="bg-[#161d2e] border border-white/10 rounded-xl p-4 mb-5">
-            <p className="text-xs text-gray-600 uppercase tracking-wider mb-3">Today's high score</p>
+            <p className="text-sm text-gray-600 uppercase tracking-wider mb-3">Today's high score</p>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-medium text-[#97C459]">{highscore.score} <span className="text-base text-gray-600">/ {max}</span></p>
-                <p className="text-xs text-gray-600 mt-1">Set at {highscore.setAt}</p>
+                <p className="text-sm text-gray-600 mt-1">Set at {highscore.setAt}</p>
               </div>
               {isNewRecord
-                ? <span className="text-xs bg-[#1a2e0a] border border-[#3B6D11]/40 text-[#97C459] px-3 py-1 rounded-full">New record!</span>
+                ? <span className="text-sm bg-[#1a2e0a] border border-[#3B6D11]/40 text-[#97C459] px-3 py-1 rounded-full">New record!</span>
                 : totalScore < highscore.score
-                  ? <p className="text-xs text-gray-600 text-right">Need<br /><span className="text-[#97C459] font-medium">{highscore.score - totalScore + 1} more pts</span><br />to beat it</p>
+                  ? <p className="text-sm text-gray-600 text-right">Need<br /><span className="text-[#97C459] font-medium">{highscore.score - totalScore + 1} more pts</span><br />to beat it</p>
                   : null
               }
             </div>
@@ -396,9 +396,9 @@ function SummaryScreen({ results, puzzles, totalScore, highscore, isNewRecord, d
               <div key={i} className="flex items-center justify-between py-2.5 border-b border-white/5 last:border-0">
                 <div className="flex-1 mr-3">
                   <p className="text-sm text-white">{p.answer}</p>
-                  <p className="text-xs text-gray-600">{p.roots.map(ro => ro.text).join(' + ')}</p>
+                  <p className="text-sm text-gray-600">{p.roots.map(ro => ro.text).join(' + ')}</p>
                 </div>
-                <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${r.correct ? 'bg-[#1a2e0a] text-[#97C459]' : 'bg-red-900/30 text-red-400'}`}>
+                <span className={`text-sm px-2.5 py-1 rounded-full font-medium ${r.correct ? 'bg-[#1a2e0a] text-[#97C459]' : 'bg-red-900/30 text-red-400'}`}>
                   {r.correct ? `+${r.pts} pts` : '0 pts'}
                 </span>
               </div>
