@@ -47,36 +47,33 @@ export default function GamePage() {
     return () => clearTimeout(timer)
   }, [timerKey])
 
-async function loadGame() {
-  try {
-    // Load high score from Supabase separately
-    const { data: existing } = await supabase
-      .from('edamamogy_highscores')
-      .select('score, set_at, puzzles')
-      .eq('date', today)
-      .maybeSingle()
+  async function loadGame() {
+    try {
+      const { data: existing } = await supabase
+        .from('edamamogy_highscores')
+        .select('score, set_at, puzzles')
+        .eq('date', today)
+        .maybeSingle()
 
-    if (existing?.score) {
-      setHighscore({ score: existing.score, setAt: existing.set_at })
+      if (existing?.score) {
+        setHighscore({ score: existing.score, setAt: existing.set_at })
+      }
+
+      const res = await fetch('/api/questions')
+      const json = await res.json()
+      const loadedPuzzles: Puzzle[] = json.puzzles
+
+      setPuzzles(loadedPuzzles)
+      initPuzzle(loadedPuzzles[0])
+      setScreen('game')
+    } catch {
+      const res = await fetch('/api/questions')
+      const json = await res.json()
+      setPuzzles(json.puzzles)
+      initPuzzle(json.puzzles[0])
+      setScreen('game')
     }
-
-    // Always fetch fresh puzzles from the API
-    // The API route handles caching in Supabase internally
-    const res = await fetch('/api/questions')
-    const json = await res.json()
-    const loadedPuzzles: Puzzle[] = json.puzzles
-
-    setPuzzles(loadedPuzzles)
-    initPuzzle(loadedPuzzles[0])
-    setScreen('game')
-  } catch {
-    const res = await fetch('/api/questions')
-    const json = await res.json()
-    setPuzzles(json.puzzles)
-    initPuzzle(json.puzzles[0])
-    setScreen('game')
   }
-}
 
   function initPuzzle(puzzle: Puzzle) {
     setSlots(Array(puzzle.roots.length).fill(null))
@@ -174,7 +171,6 @@ async function loadGame() {
   }
 
   async function finishGame() {
-    const finalScore = results.reduce((sum, r) => sum + r.pts, 0) + (answerState === 'correct' ? 0 : 0)
     const setAt = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
 
     try {
@@ -196,10 +192,10 @@ async function loadGame() {
 
   if (screen === 'loading') {
     return (
-      <main className="min-h-screen flex items-center justify-center">
+      <main className="min-h-screen flex items-center justify-center" style={{ background: '#f5f7f2' }}>
         <div className="text-center">
           <p className="text-2xl mb-2">🌱</p>
-          <p className="text-gray-500 text-sm">Growing today's roots...</p>
+          <p className="text-sm" style={{ color: '#6b8f5e' }}>Growing today's roots...</p>
         </div>
       </main>
     )
@@ -217,18 +213,18 @@ async function loadGame() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center px-4 py-4">
+    <main className="min-h-screen flex flex-col items-center px-4 py-4" style={{ background: '#f5f7f2' }}>
       <div className="w-full max-w-sm">
 
         {/* Top bar */}
         <div className="flex items-center justify-between mb-1">
-          <Link href="/" className="text-gray-500 hover:text-gray-700 text-sm">← back</Link>
-          <h1 className="text-base font-medium text-gray-900">Edamamogy</h1>
-          <div className="text-sm text-gray-400">daily</div>
+          <Link href="/" className="text-sm transition-colors" style={{ color: '#6b8f5e' }}>← back</Link>
+          <h1 className="text-base font-medium" style={{ color: '#1a3a08' }}>Edamamogy</h1>
+          <div className="text-sm" style={{ color: '#9db88a' }}>daily</div>
         </div>
 
         {/* Progress bar */}
-        <div className="h-[3px] bg-gray-200 rounded-full my-2">
+        <div className="h-[3px] rounded-full my-2" style={{ background: '#d4e8c2' }}>
           <div
             className="h-full bg-[#3B6D11] rounded-full transition-all duration-500"
             style={{ width: `${(qi / puzzles.length) * 100}%` }}
@@ -237,16 +233,16 @@ async function loadGame() {
 
         {/* Meta row */}
         <div className="flex items-center justify-between mb-3">
-          <span className="text-sm text-[#3B6D11] font-medium">Word {qi + 1} / {puzzles.length}</span>
+          <span className="text-sm font-medium" style={{ color: '#3B6D11' }}>Word {qi + 1} / {puzzles.length}</span>
           <ProgressDots total={PUZZLES_PER_DAY} current={qi} results={dotResults} />
           {answersRevealed && <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />}
         </div>
 
         {/* Definition card */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-3 mb-3 fade-up">
-          <p className="text-sm text-gray-400 uppercase tracking-wider mb-1">What word means...</p>
-          <p className="text-base text-gray-900 leading-snug">{puzzle.definition}</p>
-          <p className="text-sm text-gray-400 italic mt-1">{puzzle.partOfSpeech}</p>
+        <div className="rounded-2xl p-3 mb-3 fade-up" style={{ background: '#fff', border: '1px solid #d4e8c2' }}>
+          <p className="text-sm uppercase tracking-wider mb-1" style={{ color: '#9db88a' }}>What word means...</p>
+          <p className="text-base leading-snug" style={{ color: '#1a3a08' }}>{puzzle.definition}</p>
+          <p className="text-sm italic mt-1" style={{ color: '#9db88a' }}>{puzzle.partOfSpeech}</p>
         </div>
 
         {/* Pod */}
@@ -302,7 +298,8 @@ async function loadGame() {
             </button>
             <button
               onClick={clearPod}
-              className="w-full py-2.5 border border-gray-200 hover:border-gray-300 text-gray-500 rounded-xl text-sm transition-colors"
+              className="w-full py-2.5 rounded-xl text-sm transition-colors"
+              style={{ border: '1px solid #d4e8c2', color: '#6b8f5e' }}
             >
               Clear pod
             </button>
@@ -338,42 +335,44 @@ function SummaryScreen({ results, puzzles, totalScore, highscore, isNewRecord, d
   const shareText = `Edamamogy — ${dateStr}\n\n${emoji} I scored ${totalScore}/${max}\n\n${results.map((r, i) => `${puzzles[i]?.roots.map(ro => ro.text).join(' + ')} = ${puzzles[i]?.answer} ${r.correct ? '✓' : '✗'}`).join('\n')}\n\n#Edamamogy`
 
   return (
-    <main className="min-h-screen flex flex-col items-center px-4 py-8">
+    <main className="min-h-screen flex flex-col items-center px-4 py-8" style={{ background: '#f5f7f2' }}>
       <div className="w-full max-w-sm fade-up">
 
         <div className="text-center mb-6">
           <p className="text-4xl mb-2">{emoji}</p>
-          <p className="text-xl font-medium text-gray-900 mb-1">{msg}</p>
-          <p className="text-sm text-gray-500">{dateStr}</p>
+          <p className="text-xl font-medium mb-1" style={{ color: '#1a3a08' }}>{msg}</p>
+          <p className="text-sm" style={{ color: '#6b8f5e' }}>{dateStr}</p>
         </div>
 
         {/* Score cards */}
         <div className="grid grid-cols-3 gap-3 mb-5">
           {[
-            { label: 'Your score', val: `${totalScore}/${max}`, color: 'text-[#3B6D11]' },
-            { label: "Today's best", val: highscore ? `${highscore.score}/${max}` : '—', color: 'text-gray-900' },
-            { label: 'Words correct', val: `${results.filter(r => r.correct).length}/${results.length}`, color: 'text-gray-900' },
+            { label: 'Your score', val: `${totalScore}/${max}`, color: '#3B6D11' },
+            { label: "Today's best", val: highscore ? `${highscore.score}/${max}` : '—', color: '#1a3a08' },
+            { label: 'Words correct', val: `${results.filter(r => r.correct).length}/${results.length}`, color: '#1a3a08' },
           ].map(c => (
-            <div key={c.label} className="bg-white border border-gray-200 rounded-xl p-3 text-center">
-              <p className="text-sm text-gray-400 mb-1">{c.label}</p>
-              <p className={`text-lg font-medium ${c.color}`}>{c.val}</p>
+            <div key={c.label} className="rounded-xl p-3 text-center" style={{ background: '#fff', border: '1px solid #d4e8c2' }}>
+              <p className="text-xs mb-1" style={{ color: '#9db88a' }}>{c.label}</p>
+              <p className="text-lg font-medium" style={{ color: c.color }}>{c.val}</p>
             </div>
           ))}
         </div>
 
         {/* High score block */}
         {highscore && (
-          <div className="bg-white border border-gray-200 rounded-xl p-4 mb-5">
-            <p className="text-sm text-gray-400 uppercase tracking-wider mb-3">Today's high score</p>
+          <div className="rounded-xl p-4 mb-5" style={{ background: '#fff', border: '1px solid #d4e8c2' }}>
+            <p className="text-xs uppercase tracking-wider mb-3" style={{ color: '#9db88a' }}>Today's high score</p>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-medium text-[#3B6D11]">{highscore.score} <span className="text-base text-gray-400">/ {max}</span></p>
-                <p className="text-sm text-gray-400 mt-1">Set at {highscore.setAt}</p>
+                <p className="text-2xl font-medium" style={{ color: '#3B6D11' }}>
+                  {highscore.score} <span className="text-base" style={{ color: '#9db88a' }}>/ {max}</span>
+                </p>
+                <p className="text-xs mt-1" style={{ color: '#9db88a' }}>Set at {highscore.setAt}</p>
               </div>
               {isNewRecord
                 ? <span className="text-sm bg-[#EAF3DE] border border-[#3B6D11]/40 text-[#27500A] px-3 py-1 rounded-full">New record!</span>
                 : totalScore < highscore.score
-                  ? <p className="text-sm text-gray-400 text-right">Need<br /><span className="text-[#3B6D11] font-medium">{highscore.score - totalScore + 1} more pts</span><br />to beat it</p>
+                  ? <p className="text-sm text-right" style={{ color: '#9db88a' }}>Need<br /><span className="font-medium" style={{ color: '#3B6D11' }}>{highscore.score - totalScore + 1} more pts</span><br />to beat it</p>
                   : null
               }
             </div>
@@ -381,15 +380,15 @@ function SummaryScreen({ results, puzzles, totalScore, highscore, isNewRecord, d
         )}
 
         {/* Result rows */}
-        <div className="bg-white border border-gray-200 rounded-xl p-4 mb-5">
+        <div className="rounded-xl p-4 mb-5" style={{ background: '#fff', border: '1px solid #d4e8c2' }}>
           {results.map((r, i) => {
             const p = puzzles[i]
             if (!p) return null
             return (
-              <div key={i} className="flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0">
+              <div key={i} className="flex items-center justify-between py-2.5 last:border-0" style={{ borderBottom: i < results.length - 1 ? '1px solid #e8f3dc' : undefined }}>
                 <div className="flex-1 mr-3">
-                  <p className="text-sm text-gray-900">{p.answer}</p>
-                  <p className="text-sm text-gray-400">{p.roots.map(ro => ro.text).join(' + ')}</p>
+                  <p className="text-sm" style={{ color: '#1a3a08' }}>{p.answer}</p>
+                  <p className="text-sm" style={{ color: '#9db88a' }}>{p.roots.map(ro => ro.text).join(' + ')}</p>
                 </div>
                 <span className={`text-sm px-2.5 py-1 rounded-full font-medium ${r.correct ? 'bg-[#EAF3DE] text-[#27500A]' : 'bg-red-50 text-red-500'}`}>
                   {r.correct ? `+${r.pts} pts` : '0 pts'}
@@ -405,7 +404,7 @@ function SummaryScreen({ results, puzzles, totalScore, highscore, isNewRecord, d
         >
           Share result
         </button>
-        <Link href="/" className="block w-full py-2.5 border border-gray-200 hover:border-gray-300 text-gray-500 rounded-xl text-sm text-center transition-colors">
+        <Link href="/" className="block w-full py-2.5 rounded-xl text-sm text-center transition-colors" style={{ border: '1px solid #d4e8c2', color: '#6b8f5e' }}>
           Back to home
         </Link>
 

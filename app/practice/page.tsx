@@ -121,8 +121,8 @@ export default function PracticePage() {
   }
 
   if (loading) return (
-    <main className="min-h-screen flex items-center justify-center">
-      <p className="text-gray-400 text-sm">Growing roots...</p>
+    <main className="min-h-screen flex items-center justify-center" style={{ background: '#f5f7f2' }}>
+      <p className="text-sm" style={{ color: '#6b8f5e' }}>Growing roots...</p>
     </main>
   )
 
@@ -133,32 +133,32 @@ export default function PracticePage() {
     const emoji = scoreEmoji(totalScore)
     const msg = scoreMessage(totalScore)
     return (
-      <main className="min-h-screen flex flex-col items-center px-4 py-8">
+      <main className="min-h-screen flex flex-col items-center px-4 py-8" style={{ background: '#f5f7f2' }}>
         <div className="w-full max-w-sm fade-up">
           <div className="text-center mb-6">
             <p className="text-4xl mb-2">{emoji}</p>
-            <p className="text-xl font-medium text-gray-900 mb-1">{msg}</p>
-            <p className="text-sm text-[#3B6D11] font-medium">Practice mode</p>
+            <p className="text-xl font-medium mb-1" style={{ color: '#1a3a08' }}>{msg}</p>
+            <p className="text-sm font-medium" style={{ color: '#3B6D11' }}>Practice mode</p>
           </div>
           <div className="grid grid-cols-2 gap-3 mb-5">
-            <div className="bg-white border border-gray-200 rounded-xl p-3 text-center">
-              <p className="text-sm text-gray-400 mb-1">Score</p>
-              <p className="text-lg font-medium text-[#3B6D11]">{totalScore}/{max}</p>
+            <div className="rounded-xl p-3 text-center" style={{ background: '#fff', border: '1px solid #d4e8c2' }}>
+              <p className="text-xs mb-1" style={{ color: '#9db88a' }}>Score</p>
+              <p className="text-lg font-medium" style={{ color: '#3B6D11' }}>{totalScore}/{max}</p>
             </div>
-            <div className="bg-white border border-gray-200 rounded-xl p-3 text-center">
-              <p className="text-sm text-gray-400 mb-1">Correct</p>
-              <p className="text-lg font-medium text-gray-900">{results.filter(r => r.correct).length}/{results.length}</p>
+            <div className="rounded-xl p-3 text-center" style={{ background: '#fff', border: '1px solid #d4e8c2' }}>
+              <p className="text-xs mb-1" style={{ color: '#9db88a' }}>Correct</p>
+              <p className="text-lg font-medium" style={{ color: '#1a3a08' }}>{results.filter(r => r.correct).length}/{results.length}</p>
             </div>
           </div>
-          <div className="bg-white border border-gray-200 rounded-xl p-4 mb-5">
+          <div className="rounded-xl p-4 mb-5" style={{ background: '#fff', border: '1px solid #d4e8c2' }}>
             {results.map((r, i) => {
               const p = puzzles[i]
               if (!p) return null
               return (
-                <div key={i} className="flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0">
+                <div key={i} className="flex items-center justify-between py-2.5 last:border-0" style={{ borderBottom: i < results.length - 1 ? '1px solid #e8f3dc' : undefined }}>
                   <div>
-                    <p className="text-sm text-gray-900">{p.answer}</p>
-                    <p className="text-sm text-gray-400">{p.roots.map(ro => ro.text).join(' + ')}</p>
+                    <p className="text-sm" style={{ color: '#1a3a08' }}>{p.answer}</p>
+                    <p className="text-sm" style={{ color: '#9db88a' }}>{p.roots.map(ro => ro.text).join(' + ')}</p>
                   </div>
                   <span className={`text-sm px-2.5 py-1 rounded-full ${r.correct ? 'bg-[#EAF3DE] text-[#27500A]' : 'bg-red-50 text-red-500'}`}>
                     {r.correct ? `+${r.pts}` : '0 pts'}
@@ -170,8 +170,11 @@ export default function PracticePage() {
           <Link href="/game" className="block w-full py-3 bg-[#3B6D11] hover:bg-[#27500A] text-[#EAF3DE] rounded-xl text-sm font-medium text-center mb-3 transition-colors">
             Play daily game
           </Link>
-          <button onClick={() => { setQi(0); setResults([]); setTotalScore(0); setDotResults(Array(PUZZLES_PER_DAY).fill(null)); setShowSummary(false); initPuzzle(puzzles, 0) }}
-            className="w-full py-2.5 border border-gray-200 text-gray-500 rounded-xl text-sm transition-colors hover:border-gray-300">
+          <button
+            onClick={() => { setQi(0); setResults([]); setTotalScore(0); setDotResults(Array(PUZZLES_PER_DAY).fill(null)); setShowSummary(false); initPuzzle(puzzles, 0) }}
+            className="w-full py-2.5 rounded-xl text-sm transition-colors"
+            style={{ border: '1px solid #d4e8c2', color: '#6b8f5e' }}
+          >
             Practice again
           </button>
         </div>
@@ -182,23 +185,24 @@ export default function PracticePage() {
   const missingRoot = puzzle.roots[missingIndex]
 
   return (
-    <main className="min-h-screen flex flex-col items-center px-4 py-4">
+    <main className="min-h-screen flex flex-col items-center px-4 py-4" style={{ background: '#f5f7f2' }}>
       <div className="w-full max-w-sm">
 
         <div className="flex items-center justify-between mb-2">
-          <Link href="/" className="text-gray-500 hover:text-gray-700 text-sm">← back</Link>
+          <Link href="/" className="text-sm transition-colors" style={{ color: '#6b8f5e' }}>← back</Link>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500">Practice</span>
+            <span className="text-sm" style={{ color: '#6b8f5e' }}>Practice</span>
             <div className="flex gap-1">
               {(['easy', 'medium', 'hard'] as Difficulty[]).map(d => (
                 <button
                   key={d}
                   onClick={() => { if (d !== difficulty) setDifficulty(d) }}
-                  className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
+                  className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
                     difficulty === d
-                      ? 'bg-[#3B6D11] border-[#3B6D11] text-[#EAF3DE]'
-                      : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                      ? 'bg-[#3B6D11] text-[#EAF3DE]'
+                      : ''
                   }`}
+                  style={difficulty !== d ? { border: '1px solid #d4e8c2', color: '#6b8f5e' } : undefined}
                 >
                   {d}
                 </button>
@@ -207,13 +211,13 @@ export default function PracticePage() {
           </div>
         </div>
 
-        <div className="h-[3px] bg-gray-200 rounded-full my-2">
+        <div className="h-[3px] rounded-full my-2" style={{ background: '#d4e8c2' }}>
           <div className="h-full bg-[#3B6D11] rounded-full transition-all duration-500"
             style={{ width: `${(qi / puzzles.length) * 100}%` }} />
         </div>
 
         <div className="flex items-center justify-between mb-3">
-          <span className="text-sm text-[#3B6D11] font-medium">Word {qi + 1} / {puzzles.length}</span>
+          <span className="text-sm font-medium" style={{ color: '#3B6D11' }}>Word {qi + 1} / {puzzles.length}</span>
           <ProgressDots total={PUZZLES_PER_DAY} current={qi} results={dotResults} />
           {answersRevealed && <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />}
         </div>
@@ -232,10 +236,10 @@ export default function PracticePage() {
         </div>
 
         {/* Clue card */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-3 mb-2">
-          <p className="text-sm text-gray-400 uppercase tracking-wider mb-1">The missing root means...</p>
-          <p className="text-base text-gray-900">{missingRoot.meaning}</p>
-          <p className="text-sm text-gray-400 italic mt-0.5">{missingRoot.origin}</p>
+        <div className="rounded-2xl p-3 mb-2" style={{ background: '#fff', border: '1px solid #d4e8c2' }}>
+          <p className="text-sm uppercase tracking-wider mb-1" style={{ color: '#9db88a' }}>The missing root means...</p>
+          <p className="text-base" style={{ color: '#1a3a08' }}>{missingRoot.meaning}</p>
+          <p className="text-sm italic mt-0.5" style={{ color: '#9db88a' }}>{missingRoot.origin}</p>
         </div>
 
         {/* Hint */}
@@ -248,7 +252,8 @@ export default function PracticePage() {
             ) : (
               <button
                 onClick={() => setShowHint(true)}
-                className="text-xs text-gray-400 hover:text-[#3B6D11] transition-colors"
+                className="text-xs transition-colors"
+                style={{ color: '#9db88a' }}
               >
                 Show hint (definition)
               </button>
@@ -263,17 +268,19 @@ export default function PracticePage() {
               const isCorrect = opt.id === missingRoot.id
               const isChosen = opt.id === chosenId
               const isAnswered = answerState !== 'unanswered'
-              let cls = 'bg-white border-gray-200'
-              if (isAnswered && isCorrect) cls = 'bg-[#EAF3DE] border-[#3B6D11]'
-              else if (isAnswered && isChosen && !isCorrect) cls = 'bg-red-50 border-red-300'
+              let style: React.CSSProperties = { background: '#fff', border: '1.5px solid #d4e8c2' }
+              if (isAnswered && isCorrect) style = { background: '#EAF3DE', border: '1.5px solid #3B6D11' }
+              else if (isAnswered && isChosen && !isCorrect) style = { background: '#fff1f2', border: '1.5px solid #fca5a5' }
               return (
                 <button
                   key={opt.id}
                   onClick={() => selectOption(opt)}
                   disabled={isAnswered}
-                  className={`flex flex-col items-center p-3 rounded-2xl border-[1.5px] transition-all bean ${cls} ${!isAnswered ? 'hover:border-[#3B6D11]/50 hover:bg-[#EAF3DE]/50' : ''}`}
+                  className="flex flex-col items-center p-3 rounded-2xl transition-all bean"
+                  style={style}
                 >
-                  <span className={`text-base font-medium ${isAnswered && isCorrect ? 'text-[#27500A]' : isAnswered && isChosen ? 'text-red-500' : 'text-gray-900'}`}>
+                  <span className={`text-base font-medium ${isAnswered && isCorrect ? 'text-[#27500A]' : isAnswered && isChosen ? 'text-red-500' : ''}`}
+                    style={!isAnswered || (!isCorrect && !isChosen) ? { color: '#1a3a08' } : undefined}>
                     {opt.text}
                   </span>
                 </button>

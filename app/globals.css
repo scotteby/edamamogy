@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #ffffff;
+  --bg-primary: #f5f7f2;
   --bg-card: #ffffff;
   --green-bean: #3B6D11;
   --green-light: #EAF3DE;
