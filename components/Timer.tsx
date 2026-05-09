@@ -35,7 +35,7 @@ export default function Timer({ maxTime, running, onExpire, resetKey }: TimerPro
   const borderColor = timeLeft > 10 ? 'border-[#3B6D11]/40' : timeLeft > 5 ? 'border-amber-400/40' : 'border-red-400/40'
 
   return (
-    <div className={`text-sm font-medium px-3 py-1 rounded-full border bg-[#161d2e] ${color} ${borderColor}`}>
+    <div className={`text-sm font-medium px-3 py-1 rounded-full border bg-white ${color} ${borderColor}`}>
       {timeLeft}s
     </div>
   )

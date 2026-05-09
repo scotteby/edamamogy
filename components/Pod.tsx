@@ -24,14 +24,14 @@ export default function Pod({ slots, totalSlots, revealed, answer, onRemove }: P
         {/* Pod body */}
         <path
           d="M20 50 C20 22, 46 10, 84 10 L256 10 C294 10, 320 22, 320 50 C320 78, 294 90, 256 90 L84 90 C46 90, 20 78, 20 50 Z"
-          fill={revealed ? '#27500A' : '#1a3a08'}
-          stroke="#3B6D11"
+          fill={revealed ? '#3B6D11' : '#4a7a18'}
+          stroke="#27500A"
           strokeWidth="1.5"
           style={{ transition: 'fill 0.4s' }}
         />
         {/* Stem curls */}
-        <path d="M16 43 C10 47, 10 53, 16 57" fill="none" stroke="#3B6D11" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M324 43 C330 47, 330 53, 324 57" fill="none" stroke="#3B6D11" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M16 43 C10 47, 10 53, 16 57" fill="none" stroke="#27500A" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M324 43 C330 47, 330 53, 324 57" fill="none" stroke="#27500A" strokeWidth="2" strokeLinecap="round"/>
 
         {/* Bean slots */}
         {Array.from({ length: totalSlots }).map((_, i) => {
@@ -50,8 +50,8 @@ export default function Pod({ slots, totalSlots, revealed, answer, onRemove }: P
                 cy={50}
                 rx={totalSlots === 2 ? 42 : 36}
                 ry={30}
-                fill={filled ? '#27500A' : '#131f0a'}
-                stroke={filled ? '#3B6D11' : '#2a5a0a'}
+                fill={filled ? '#EAF3DE' : 'rgba(234,243,222,0.4)'}
+                stroke={filled ? '#27500A' : '#3B6D11'}
                 strokeWidth="1"
                 strokeDasharray={filled ? undefined : '3 2'}
                 style={{ transition: 'fill 0.25s' }}
@@ -64,7 +64,7 @@ export default function Pod({ slots, totalSlots, revealed, answer, onRemove }: P
                   fontFamily="system-ui, sans-serif"
                   fontSize={13}
                   fontWeight={500}
-                  fill="#97C459"
+                  fill="#27500A"
                 >
                   {root!.text}
                 </text>
@@ -75,7 +75,7 @@ export default function Pod({ slots, totalSlots, revealed, answer, onRemove }: P
                   textAnchor="middle"
                   fontFamily="system-ui, sans-serif"
                   fontSize={11}
-                  fill="#2a5a0a"
+                  fill="#EAF3DE"
                 >
                   root {i + 1}
                 </text>
@@ -89,7 +89,7 @@ export default function Pod({ slots, totalSlots, revealed, answer, onRemove }: P
       <div
         className="text-lg font-medium transition-all duration-500"
         style={{
-          color: '#97C459',
+          color: '#3B6D11',
           opacity: revealed ? 1 : 0,
           transform: revealed ? 'translateY(0)' : 'translateY(6px)',
           minHeight: '28px',

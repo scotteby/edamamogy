@@ -25,24 +25,24 @@ export default function Home() {
 
         {/* Header */}
         <div className="text-center mb-8 fade-up">
-          <h1 className="text-3xl font-medium text-white mb-1">Edamamogy</h1>
+          <h1 className="text-3xl font-medium text-gray-900 mb-1">Edamamogy</h1>
           <p className="text-sm text-gray-500 tracking-wide">word origins, daily</p>
-          <p className="text-sm text-green-400 mt-2">{dateStr}</p>
+          <p className="text-sm text-[#3B6D11] font-medium mt-2">{dateStr}</p>
         </div>
 
         {/* High score banner */}
-        <div className="bg-[#161d2e] border border-white/10 rounded-2xl p-4 mb-6 flex items-center justify-between fade-up">
+        <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-6 flex items-center justify-between fade-up">
           <div>
             <p className="text-sm text-gray-500 mb-1">Today's high score</p>
             {highscore?.set_at ? (
               <>
-                <p className="text-xl font-medium text-green-400">{highscore.score} / {maxPossibleScore()}</p>
-                <p className="text-sm text-gray-600 mt-1">Set at {highscore.set_at}</p>
+                <p className="text-xl font-medium text-[#3B6D11]">{highscore.score} / {maxPossibleScore()}</p>
+                <p className="text-sm text-gray-400 mt-1">Set at {highscore.set_at}</p>
               </>
             ) : (
               <>
-                <p className="text-xl font-medium text-gray-600">—</p>
-                <p className="text-sm text-gray-700 mt-1">No games played yet</p>
+                <p className="text-xl font-medium text-gray-300">—</p>
+                <p className="text-sm text-gray-400 mt-1">No games played yet</p>
               </>
             )}
           </div>
@@ -52,13 +52,13 @@ export default function Home() {
         {/* Rules */}
         <div className="grid grid-cols-2 gap-3 mb-8 fade-up">
           {[
-            { label: '10 pts', sub: 'correct answer' },
+            { label: '15 pts', sub: 'correct answer' },
             { label: '+5 bonus', sub: 'answer fast' },
             { label: `${PUZZLES_PER_DAY} words`, sub: 'per day' },
             { label: `${MAX_TIME} sec`, sub: 'per puzzle' },
           ].map(r => (
-            <div key={r.label} className="bg-[#161d2e] border border-white/10 rounded-xl p-3">
-              <p className="text-sm font-medium text-green-400">{r.label}</p>
+            <div key={r.label} className="bg-white border border-gray-200 rounded-xl p-3">
+              <p className="text-sm font-medium text-[#3B6D11]">{r.label}</p>
               <p className="text-sm text-gray-500 mt-0.5">{r.sub}</p>
             </div>
           ))}
@@ -74,13 +74,13 @@ export default function Home() {
           </Link>
           <Link
             href="/practice"
-            className="w-full py-3 border border-white/10 hover:border-white/20 hover:bg-white/5 text-gray-400 rounded-xl text-sm font-medium text-center transition-colors"
+            className="w-full py-3 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-600 rounded-xl text-sm font-medium text-center transition-colors"
           >
             Practice mode
           </Link>
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-8">
+        <p className="text-center text-sm text-gray-400 mt-8">
           Build words from Latin &amp; Greek roots
         </p>
       </div>

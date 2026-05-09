@@ -222,13 +222,13 @@ async function loadGame() {
 
         {/* Top bar */}
         <div className="flex items-center justify-between mb-1">
-          <Link href="/" className="text-gray-600 hover:text-gray-400 text-sm">← back</Link>
-          <h1 className="text-base font-medium text-white">Edamamogy</h1>
-          <div className="text-sm text-gray-600">daily</div>
+          <Link href="/" className="text-gray-500 hover:text-gray-700 text-sm">← back</Link>
+          <h1 className="text-base font-medium text-gray-900">Edamamogy</h1>
+          <div className="text-sm text-gray-400">daily</div>
         </div>
 
         {/* Progress bar */}
-        <div className="h-[3px] bg-white/5 rounded-full my-2">
+        <div className="h-[3px] bg-gray-200 rounded-full my-2">
           <div
             className="h-full bg-[#3B6D11] rounded-full transition-all duration-500"
             style={{ width: `${(qi / puzzles.length) * 100}%` }}
@@ -243,10 +243,10 @@ async function loadGame() {
         </div>
 
         {/* Definition card */}
-        <div className="bg-[#161d2e] border border-white/10 rounded-2xl p-3 mb-3 fade-up">
-          <p className="text-sm text-gray-600 uppercase tracking-wider mb-1">What word means...</p>
-          <p className="text-base text-white leading-snug">{puzzle.definition}</p>
-          <p className="text-sm text-gray-600 italic mt-1">{puzzle.partOfSpeech}</p>
+        <div className="bg-white border border-gray-200 rounded-2xl p-3 mb-3 fade-up">
+          <p className="text-sm text-gray-400 uppercase tracking-wider mb-1">What word means...</p>
+          <p className="text-base text-gray-900 leading-snug">{puzzle.definition}</p>
+          <p className="text-sm text-gray-400 italic mt-1">{puzzle.partOfSpeech}</p>
         </div>
 
         {/* Pod */}
@@ -278,7 +278,7 @@ async function loadGame() {
 
         {/* Feedback */}
         {feedback && (
-          <p className={`text-sm text-center mb-2 fade-up ${answerState === 'correct' ? 'text-[#97C459]' : 'text-red-400'}`}>
+          <p className={`text-sm text-center mb-2 fade-up ${answerState === 'correct' ? 'text-[#3B6D11]' : 'text-red-500'}`}>
             {feedback}
           </p>
         )}
@@ -302,7 +302,7 @@ async function loadGame() {
             </button>
             <button
               onClick={clearPod}
-              className="w-full py-2.5 border border-white/10 hover:border-white/20 text-gray-500 rounded-xl text-sm transition-colors"
+              className="w-full py-2.5 border border-gray-200 hover:border-gray-300 text-gray-500 rounded-xl text-sm transition-colors"
             >
               Clear pod
             </button>
@@ -343,19 +343,19 @@ function SummaryScreen({ results, puzzles, totalScore, highscore, isNewRecord, d
 
         <div className="text-center mb-6">
           <p className="text-4xl mb-2">{emoji}</p>
-          <p className="text-xl font-medium text-white mb-1">{msg}</p>
+          <p className="text-xl font-medium text-gray-900 mb-1">{msg}</p>
           <p className="text-sm text-gray-500">{dateStr}</p>
         </div>
 
         {/* Score cards */}
         <div className="grid grid-cols-3 gap-3 mb-5">
           {[
-            { label: 'Your score', val: `${totalScore}/${max}`, color: 'text-[#97C459]' },
-            { label: "Today's best", val: highscore ? `${highscore.score}/${max}` : '—', color: 'text-white' },
-            { label: 'Words correct', val: `${results.filter(r => r.correct).length}/${results.length}`, color: 'text-white' },
+            { label: 'Your score', val: `${totalScore}/${max}`, color: 'text-[#3B6D11]' },
+            { label: "Today's best", val: highscore ? `${highscore.score}/${max}` : '—', color: 'text-gray-900' },
+            { label: 'Words correct', val: `${results.filter(r => r.correct).length}/${results.length}`, color: 'text-gray-900' },
           ].map(c => (
-            <div key={c.label} className="bg-[#161d2e] rounded-xl p-3 text-center">
-              <p className="text-sm text-gray-600 mb-1">{c.label}</p>
+            <div key={c.label} className="bg-white border border-gray-200 rounded-xl p-3 text-center">
+              <p className="text-sm text-gray-400 mb-1">{c.label}</p>
               <p className={`text-lg font-medium ${c.color}`}>{c.val}</p>
             </div>
           ))}
@@ -363,17 +363,17 @@ function SummaryScreen({ results, puzzles, totalScore, highscore, isNewRecord, d
 
         {/* High score block */}
         {highscore && (
-          <div className="bg-[#161d2e] border border-white/10 rounded-xl p-4 mb-5">
-            <p className="text-sm text-gray-600 uppercase tracking-wider mb-3">Today's high score</p>
+          <div className="bg-white border border-gray-200 rounded-xl p-4 mb-5">
+            <p className="text-sm text-gray-400 uppercase tracking-wider mb-3">Today's high score</p>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-medium text-[#97C459]">{highscore.score} <span className="text-base text-gray-600">/ {max}</span></p>
-                <p className="text-sm text-gray-600 mt-1">Set at {highscore.setAt}</p>
+                <p className="text-2xl font-medium text-[#3B6D11]">{highscore.score} <span className="text-base text-gray-400">/ {max}</span></p>
+                <p className="text-sm text-gray-400 mt-1">Set at {highscore.setAt}</p>
               </div>
               {isNewRecord
-                ? <span className="text-sm bg-[#1a2e0a] border border-[#3B6D11]/40 text-[#97C459] px-3 py-1 rounded-full">New record!</span>
+                ? <span className="text-sm bg-[#EAF3DE] border border-[#3B6D11]/40 text-[#27500A] px-3 py-1 rounded-full">New record!</span>
                 : totalScore < highscore.score
-                  ? <p className="text-sm text-gray-600 text-right">Need<br /><span className="text-[#97C459] font-medium">{highscore.score - totalScore + 1} more pts</span><br />to beat it</p>
+                  ? <p className="text-sm text-gray-400 text-right">Need<br /><span className="text-[#3B6D11] font-medium">{highscore.score - totalScore + 1} more pts</span><br />to beat it</p>
                   : null
               }
             </div>
@@ -381,17 +381,17 @@ function SummaryScreen({ results, puzzles, totalScore, highscore, isNewRecord, d
         )}
 
         {/* Result rows */}
-        <div className="bg-[#161d2e] border border-white/10 rounded-xl p-4 mb-5">
+        <div className="bg-white border border-gray-200 rounded-xl p-4 mb-5">
           {results.map((r, i) => {
             const p = puzzles[i]
             if (!p) return null
             return (
-              <div key={i} className="flex items-center justify-between py-2.5 border-b border-white/5 last:border-0">
+              <div key={i} className="flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0">
                 <div className="flex-1 mr-3">
-                  <p className="text-sm text-white">{p.answer}</p>
-                  <p className="text-sm text-gray-600">{p.roots.map(ro => ro.text).join(' + ')}</p>
+                  <p className="text-sm text-gray-900">{p.answer}</p>
+                  <p className="text-sm text-gray-400">{p.roots.map(ro => ro.text).join(' + ')}</p>
                 </div>
-                <span className={`text-sm px-2.5 py-1 rounded-full font-medium ${r.correct ? 'bg-[#1a2e0a] text-[#97C459]' : 'bg-red-900/30 text-red-400'}`}>
+                <span className={`text-sm px-2.5 py-1 rounded-full font-medium ${r.correct ? 'bg-[#EAF3DE] text-[#27500A]' : 'bg-red-50 text-red-500'}`}>
                   {r.correct ? `+${r.pts} pts` : '0 pts'}
                 </span>
               </div>
@@ -405,7 +405,7 @@ function SummaryScreen({ results, puzzles, totalScore, highscore, isNewRecord, d
         >
           Share result
         </button>
-        <Link href="/" className="block w-full py-2.5 border border-white/10 hover:border-white/20 text-gray-500 rounded-xl text-sm text-center transition-colors">
+        <Link href="/" className="block w-full py-2.5 border border-gray-200 hover:border-gray-300 text-gray-500 rounded-xl text-sm text-center transition-colors">
           Back to home
         </Link>
 

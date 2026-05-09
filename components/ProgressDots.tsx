@@ -19,7 +19,7 @@ export default function ProgressDots({ total, current, results }: ProgressDotsPr
               ${result === true ? 'bg-[#3B6D11]' :
                 result === false ? 'bg-red-500' :
                 isCurrent ? 'border-[1.5px] border-[#3B6D11] bg-transparent' :
-                'bg-white/10'
+                'bg-gray-200'
               }`}
           />
         )

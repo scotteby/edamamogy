@@ -29,8 +29,8 @@ export default function PracticePage() {
   const [showSummary, setShowSummary] = useState(false)
   const [missingIndex, setMissingIndex] = useState(0)
   const [options, setOptions] = useState<Root[]>([])
+  const [showHint, setShowHint] = useState(false)
   const startTimeRef = useRef<number>(0)
-  const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
   useEffect(() => { loadPuzzles(difficulty) }, [difficulty])
 
@@ -59,10 +59,8 @@ export default function PracticePage() {
 
   function initPuzzle(pList: Puzzle[], index: number) {
     const puzzle = pList[index]
-    // Pick a random root to hide
     const hiddenIdx = Math.floor(Math.random() * puzzle.roots.length)
     setMissingIndex(hiddenIdx)
-    // Build 4 options: correct + 3 decoys (shuffled)
     const correct = puzzle.roots[hiddenIdx]
     const decoys = puzzle.decoys.slice(0, 3)
     const shuffled = [correct, ...decoys].sort(() => Math.random() - 0.5)
@@ -73,6 +71,7 @@ export default function PracticePage() {
     setAnswersRevealed(false)
     setTimerRunning(false)
     setTimerKey(k => k + 1)
+    setShowHint(false)
     startTimeRef.current = Date.now()
   }
 
@@ -123,7 +122,7 @@ export default function PracticePage() {
 
   if (loading) return (
     <main className="min-h-screen flex items-center justify-center">
-      <p className="text-gray-500 text-sm">Growing roots...</p>
+      <p className="text-gray-400 text-sm">Growing roots...</p>
     </main>
   )
 
@@ -138,30 +137,30 @@ export default function PracticePage() {
         <div className="w-full max-w-sm fade-up">
           <div className="text-center mb-6">
             <p className="text-4xl mb-2">{emoji}</p>
-            <p className="text-xl font-medium text-white mb-1">{msg}</p>
-            <p className="text-sm text-[#3B6D11]">Practice mode</p>
+            <p className="text-xl font-medium text-gray-900 mb-1">{msg}</p>
+            <p className="text-sm text-[#3B6D11] font-medium">Practice mode</p>
           </div>
           <div className="grid grid-cols-2 gap-3 mb-5">
-            <div className="bg-[#161d2e] rounded-xl p-3 text-center">
-              <p className="text-sm text-gray-600 mb-1">Score</p>
-              <p className="text-lg font-medium text-[#97C459]">{totalScore}/{max}</p>
+            <div className="bg-white border border-gray-200 rounded-xl p-3 text-center">
+              <p className="text-sm text-gray-400 mb-1">Score</p>
+              <p className="text-lg font-medium text-[#3B6D11]">{totalScore}/{max}</p>
             </div>
-            <div className="bg-[#161d2e] rounded-xl p-3 text-center">
-              <p className="text-sm text-gray-600 mb-1">Correct</p>
-              <p className="text-lg font-medium text-white">{results.filter(r => r.correct).length}/{results.length}</p>
+            <div className="bg-white border border-gray-200 rounded-xl p-3 text-center">
+              <p className="text-sm text-gray-400 mb-1">Correct</p>
+              <p className="text-lg font-medium text-gray-900">{results.filter(r => r.correct).length}/{results.length}</p>
             </div>
           </div>
-          <div className="bg-[#161d2e] border border-white/10 rounded-xl p-4 mb-5">
+          <div className="bg-white border border-gray-200 rounded-xl p-4 mb-5">
             {results.map((r, i) => {
               const p = puzzles[i]
               if (!p) return null
               return (
-                <div key={i} className="flex items-center justify-between py-2.5 border-b border-white/5 last:border-0">
+                <div key={i} className="flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0">
                   <div>
-                    <p className="text-sm text-white">{p.answer}</p>
-                    <p className="text-sm text-gray-600">{p.roots.map(ro => ro.text).join(' + ')}</p>
+                    <p className="text-sm text-gray-900">{p.answer}</p>
+                    <p className="text-sm text-gray-400">{p.roots.map(ro => ro.text).join(' + ')}</p>
                   </div>
-                  <span className={`text-sm px-2.5 py-1 rounded-full ${r.correct ? 'bg-[#1a2e0a] text-[#97C459]' : 'bg-red-900/30 text-red-400'}`}>
+                  <span className={`text-sm px-2.5 py-1 rounded-full ${r.correct ? 'bg-[#EAF3DE] text-[#27500A]' : 'bg-red-50 text-red-500'}`}>
                     {r.correct ? `+${r.pts}` : '0 pts'}
                   </span>
                 </div>
@@ -172,7 +171,7 @@ export default function PracticePage() {
             Play daily game
           </Link>
           <button onClick={() => { setQi(0); setResults([]); setTotalScore(0); setDotResults(Array(PUZZLES_PER_DAY).fill(null)); setShowSummary(false); initPuzzle(puzzles, 0) }}
-            className="w-full py-2.5 border border-white/10 text-gray-500 rounded-xl text-sm transition-colors">
+            className="w-full py-2.5 border border-gray-200 text-gray-500 rounded-xl text-sm transition-colors hover:border-gray-300">
             Practice again
           </button>
         </div>
@@ -187,7 +186,7 @@ export default function PracticePage() {
       <div className="w-full max-w-sm">
 
         <div className="flex items-center justify-between mb-2">
-          <Link href="/" className="text-gray-600 hover:text-gray-400 text-sm">← back</Link>
+          <Link href="/" className="text-gray-500 hover:text-gray-700 text-sm">← back</Link>
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-500">Practice</span>
             <div className="flex gap-1">
@@ -198,7 +197,7 @@ export default function PracticePage() {
                   className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
                     difficulty === d
                       ? 'bg-[#3B6D11] border-[#3B6D11] text-[#EAF3DE]'
-                      : 'border-white/10 text-gray-500 hover:border-white/20 hover:text-gray-400'
+                      : 'border-gray-200 text-gray-500 hover:border-gray-300'
                   }`}
                 >
                   {d}
@@ -208,7 +207,7 @@ export default function PracticePage() {
           </div>
         </div>
 
-        <div className="h-[3px] bg-white/5 rounded-full my-2">
+        <div className="h-[3px] bg-gray-200 rounded-full my-2">
           <div className="h-full bg-[#3B6D11] rounded-full transition-all duration-500"
             style={{ width: `${(qi / puzzles.length) * 100}%` }} />
         </div>
@@ -233,11 +232,29 @@ export default function PracticePage() {
         </div>
 
         {/* Clue card */}
-        <div className="bg-[#161d2e] border border-white/10 rounded-2xl p-3 mb-3">
-          <p className="text-sm text-gray-600 uppercase tracking-wider mb-1">The missing root means...</p>
-          <p className="text-base text-white">{missingRoot.meaning}</p>
-          <p className="text-sm text-gray-600 italic mt-0.5">{missingRoot.origin}</p>
+        <div className="bg-white border border-gray-200 rounded-2xl p-3 mb-2">
+          <p className="text-sm text-gray-400 uppercase tracking-wider mb-1">The missing root means...</p>
+          <p className="text-base text-gray-900">{missingRoot.meaning}</p>
+          <p className="text-sm text-gray-400 italic mt-0.5">{missingRoot.origin}</p>
         </div>
+
+        {/* Hint */}
+        {answerState === 'unanswered' && (
+          <div className="mb-3">
+            {showHint ? (
+              <div className="bg-[#EAF3DE] border border-[#3B6D11]/20 rounded-xl px-3 py-2 fade-up">
+                <p className="text-sm text-[#27500A]">{puzzle.definition}</p>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowHint(true)}
+                className="text-xs text-gray-400 hover:text-[#3B6D11] transition-colors"
+              >
+                Show hint (definition)
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Option beans */}
         {answersRevealed && (
@@ -246,17 +263,17 @@ export default function PracticePage() {
               const isCorrect = opt.id === missingRoot.id
               const isChosen = opt.id === chosenId
               const isAnswered = answerState !== 'unanswered'
-              let cls = 'bg-[#161d2e] border-white/10'
-              if (isAnswered && isCorrect) cls = 'bg-[#1a2e0a] border-[#3B6D11]'
-              else if (isAnswered && isChosen && !isCorrect) cls = 'bg-red-900/20 border-red-500/50'
+              let cls = 'bg-white border-gray-200'
+              if (isAnswered && isCorrect) cls = 'bg-[#EAF3DE] border-[#3B6D11]'
+              else if (isAnswered && isChosen && !isCorrect) cls = 'bg-red-50 border-red-300'
               return (
                 <button
                   key={opt.id}
                   onClick={() => selectOption(opt)}
                   disabled={isAnswered}
-                  className={`flex flex-col items-center p-3 rounded-2xl border-[1.5px] transition-all bean ${cls} ${!isAnswered ? 'hover:border-[#3B6D11]/60 hover:bg-[#1a2e0a]/40' : ''}`}
+                  className={`flex flex-col items-center p-3 rounded-2xl border-[1.5px] transition-all bean ${cls} ${!isAnswered ? 'hover:border-[#3B6D11]/50 hover:bg-[#EAF3DE]/50' : ''}`}
                 >
-                  <span className={`text-base font-medium ${isAnswered && isCorrect ? 'text-[#97C459]' : isAnswered && isChosen ? 'text-red-400' : 'text-white'}`}>
+                  <span className={`text-base font-medium ${isAnswered && isCorrect ? 'text-[#27500A]' : isAnswered && isChosen ? 'text-red-500' : 'text-gray-900'}`}>
                     {opt.text}
                   </span>
                 </button>
@@ -266,7 +283,7 @@ export default function PracticePage() {
         )}
 
         {feedback && (
-          <p className={`text-sm text-center mb-2 fade-up ${answerState === 'correct' ? 'text-[#97C459]' : 'text-red-400'}`}>
+          <p className={`text-sm text-center mb-2 fade-up ${answerState === 'correct' ? 'text-[#3B6D11]' : 'text-red-500'}`}>
             {feedback}
           </p>
         )}

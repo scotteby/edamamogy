@@ -15,10 +15,10 @@ export default function Bean({ root, used, onClick }: BeanProps) {
       className={`flex flex-col items-center px-4 py-2.5 rounded-2xl border-[1.5px] transition-all bean
         ${used
           ? 'opacity-30 cursor-default border-[#3B6D11]/30 bg-transparent'
-          : 'border-[#3B6D11] bg-[#EAF3DE]/10 hover:bg-[#EAF3DE]/20 cursor-pointer'
+          : 'border-[#3B6D11] bg-[#EAF3DE] hover:bg-[#d8edbe] cursor-pointer'
         }`}
     >
-      <span className={`text-sm font-medium ${used ? 'text-gray-500' : 'text-[#97C459]'}`}>
+      <span className={`text-sm font-medium ${used ? 'text-gray-400' : 'text-[#27500A]'}`}>
         {root.text}
       </span>
     </button>

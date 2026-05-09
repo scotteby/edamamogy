@@ -3,9 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #0a0e1a;
-  --bg-secondary: #111827;
-  --bg-card: #161d2e;
+  --bg-primary: #f5f8f0;
+  --bg-card: #ffffff;
   --green-bean: #3B6D11;
   --green-light: #EAF3DE;
   --green-dark: #27500A;
@@ -13,7 +12,7 @@
 
 body {
   background-color: var(--bg-primary);
-  color: #e8e8f0;
+  color: #111827;
   font-family: system-ui, -apple-system, sans-serif;
 }
 
