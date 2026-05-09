@@ -8,8 +8,10 @@ import ProgressDots from '@/components/ProgressDots'
 import Timer from '@/components/Timer'
 
 type AnswerState = 'unanswered' | 'correct' | 'wrong' | 'timeout'
+type Difficulty = 'easy' | 'medium' | 'hard'
 
 export default function PracticePage() {
+  const [difficulty, setDifficulty] = useState<Difficulty>('medium')
   const [puzzles, setPuzzles] = useState<Puzzle[]>([])
   const [qi, setQi] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -28,7 +30,7 @@ export default function PracticePage() {
   const startTimeRef = useRef<number>(0)
   const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
-  useEffect(() => { loadPuzzles() }, [])
+  useEffect(() => { loadPuzzles(difficulty) }, [difficulty])
 
   useEffect(() => {
     if (!timerKey) return
@@ -39,11 +41,17 @@ export default function PracticePage() {
     return () => clearTimeout(timer)
   }, [timerKey])
 
-  async function loadPuzzles() {
-    const res = await fetch('/api/questions')
+  async function loadPuzzles(diff: Difficulty) {
+    setLoading(true)
+    const res = await fetch(`/api/questions?difficulty=${diff}`)
     const json = await res.json()
     const loaded: Puzzle[] = json.puzzles
     setPuzzles(loaded)
+    setQi(0)
+    setResults([])
+    setTotalScore(0)
+    setDotResults(Array(PUZZLES_PER_DAY).fill(null))
+    setShowSummary(false)
     initPuzzle(loaded, 0)
     setLoading(false)
   }
@@ -179,10 +187,26 @@ export default function PracticePage() {
     <main className="min-h-screen flex flex-col items-center px-4 py-4">
       <div className="w-full max-w-sm">
 
-        <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center justify-between mb-2">
           <Link href="/" className="text-gray-600 hover:text-gray-400 text-sm">← back</Link>
           <h1 className="text-base font-medium text-white">Practice</h1>
-          <div className="text-sm text-[#3B6D11]">easy mode</div>
+          <span className="text-sm w-10" />
+        </div>
+
+        <div className="flex gap-1.5 mb-2">
+          {(['easy', 'medium', 'hard'] as Difficulty[]).map(d => (
+            <button
+              key={d}
+              onClick={() => { if (d !== difficulty) setDifficulty(d) }}
+              className={`flex-1 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+                difficulty === d
+                  ? 'bg-[#3B6D11] border-[#3B6D11] text-[#EAF3DE]'
+                  : 'border-white/10 text-gray-500 hover:border-white/20 hover:text-gray-400'
+              }`}
+            >
+              {d}
+            </button>
+          ))}
         </div>
 
         <div className="h-[3px] bg-white/5 rounded-full my-2">

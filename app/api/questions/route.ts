@@ -16,21 +16,10 @@ const DATE_STR = new Date().toLocaleDateString('en-US', {
   weekday: 'long', month: 'long', day: 'numeric'
 })
 
-export async function GET() {
-  try {
-    const { data: existing } = await supabase
-      .from('edamamogy_highscores')
-      .select('puzzles')
-      .eq('date', TODAY)
-      .maybeSingle()
+type Difficulty = 'easy' | 'medium' | 'hard'
 
-    if (existing?.puzzles?.length) {
-      return NextResponse.json({ puzzles: existing.puzzles, source: 'cache' })
-    }
-    
-    const prompt = `Generate 5 etymology word puzzles for a daily word game called Edamamogy (${DATE_STR}).
-
-Difficulty: MEDIUM. Words educated adults will recognize but not immediately know the roots of. Not too easy (avoid telephone, biography) but not GRE-obscure either.
+const DIFFICULTY_BLOCKS: Record<Difficulty, string> = {
+  easy: `Difficulty: EASY. Words that most educated adults will recognize, often with familiar roots. Good for learners and casual players.
 
 Good examples of the right level:
 - Sympathy (sym + pathy) — feeling together with someone
@@ -38,6 +27,48 @@ Good examples of the right level:
 - Geology (geo + logy) — study of the earth
 - Democracy (demo + cracy) — rule by the people
 - Microscope (micro + scope) — instrument for seeing small things
+- Aquatic (aqua + tic) — relating to water
+- Centennial (cent + ennial) — relating to a hundred years
+- Photograph (photo + graph) — writing with light`,
+  medium: `Difficulty: MEDIUM. Words educated adults will recognize but not immediately know the roots of. Not too easy (avoid telephone, biography) but not GRE-obscure either.
+
+Good examples of the right level:
+- Sympathy (sym + pathy) — feeling together with someone
+- Chronicle (chron + icle) — a record of events in time
+- Geology (geo + logy) — study of the earth
+- Democracy (demo + cracy) — rule by the people
+- Microscope (micro + scope) — instrument for seeing small things`,
+  hard: `Difficulty: HARD. Mix of medium and challenging vocabulary — think GRE-level words that educated adults might not immediately recognize. Avoid obvious words like telescope, biography, telephone.
+
+Good examples of the right level:
+- Pusillanimous (pusill + anim + ous) — cowardly
+- Loquacious (loqu + acious) — talkative
+- Ephemeral (epi + hemer + al) — lasting a short time
+- Concatenate (con + caten + ate) — link together in a chain
+- Perspicacious (per + spic + acious) — having a ready insight`,
+}
+
+export async function GET(request: Request) {
+  try {
+    const url = new URL(request.url)
+    const param = url.searchParams.get('difficulty')
+    const difficulty: Difficulty =
+      param === 'easy' || param === 'hard' ? param : 'medium'
+    const useCache = difficulty === 'medium'
+
+    const { data: existing } = await supabase
+      .from('edamamogy_highscores')
+      .select('puzzles')
+      .eq('date', TODAY)
+      .maybeSingle()
+
+    if (useCache && existing?.puzzles?.length) {
+      return NextResponse.json({ puzzles: existing.puzzles, source: 'cache' })
+    }
+
+    const prompt = `Generate 5 etymology word puzzles for a daily word game called Edamamogy (${DATE_STR}).
+
+${DIFFICULTY_BLOCKS[difficulty]}
 
 Return ONLY valid JSON — no markdown, no backticks, no explanation:
 
@@ -114,15 +145,17 @@ Rules:
 
     const puzzles = JSON.parse(text).puzzles
 
-    if (existing) {
-      await supabase
-        .from('edamamogy_highscores')
-        .update({ puzzles, ai_generated: true, updated_at: new Date().toISOString() })
-        .eq('date', TODAY)
-    } else {
-      await supabase
-        .from('edamamogy_highscores')
-        .insert({ date: TODAY, score: 0, set_at: '', puzzles, ai_generated: true, updated_at: new Date().toISOString() })
+    if (useCache) {
+      if (existing) {
+        await supabase
+          .from('edamamogy_highscores')
+          .update({ puzzles, ai_generated: true, updated_at: new Date().toISOString() })
+          .eq('date', TODAY)
+      } else {
+        await supabase
+          .from('edamamogy_highscores')
+          .insert({ date: TODAY, score: 0, set_at: '', puzzles, ai_generated: true, updated_at: new Date().toISOString() })
+      }
     }
 
     return NextResponse.json({ puzzles, source: 'claude' })
