@@ -78,7 +78,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <p className="text-center text-sm text-gray-700 mt-8">
+        <p className="text-center text-sm text-gray-500 mt-8">
           Build words from Latin &amp; Greek roots
         </p>
       </div>
