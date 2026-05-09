@@ -18,7 +18,7 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-4 py-6">
+    <main className="min-h-screen flex flex-col items-center px-4 pt-10 pb-6">
       <div className="w-full max-w-sm">
 
         {/* Header */}
