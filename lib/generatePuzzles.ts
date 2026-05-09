@@ -9,7 +9,7 @@ const DATE_STR = new Date().toLocaleDateString('en-US', {
 const DIFFICULTY_BLOCKS: Record<Difficulty, string> = {
   easy: `Difficulty: EASY. Words that most educated adults will recognize, often with familiar roots. Good for learners and casual players.
 
-Good examples of the right level:
+Aim for this level of familiarity (do NOT use these exact words as answers — they are only examples of the difficulty level):
 - Sympathy (sym + pathy) — feeling together with someone
 - Chronicle (chron + icle) — a record of events in time
 - Geology (geo + logy) — study of the earth
@@ -17,23 +17,29 @@ Good examples of the right level:
 - Microscope (micro + scope) — instrument for seeing small things
 - Aquatic (aqua + tic) — relating to water
 - Centennial (cent + ennial) — relating to a hundred years
-- Photograph (photo + graph) — writing with light`,
-  medium: `Difficulty: MEDIUM. Words educated adults will recognize but not immediately know the roots of. Not too easy (avoid telephone, biography) but not GRE-obscure either.
+- Photograph (photo + graph) — writing with light
 
-Good examples of the right level:
+Choose 5 DIFFERENT words at this same level of familiarity. Be creative — there are thousands of good options.`,
+  medium: `Difficulty: MEDIUM. Words educated adults will recognize but not immediately know the roots of. Not too easy (avoid telephone, biography, telescope) but not GRE-obscure either.
+
+Aim for this level (do NOT use these exact words as answers — they are only examples of the difficulty level):
 - Sympathy (sym + pathy) — feeling together with someone
 - Chronicle (chron + icle) — a record of events in time
 - Geology (geo + logy) — study of the earth
 - Democracy (demo + cracy) — rule by the people
-- Microscope (micro + scope) — instrument for seeing small things`,
+- Microscope (micro + scope) — instrument for seeing small things
+
+Choose 5 DIFFERENT words at this same level. Be creative — there are thousands of good options.`,
   hard: `Difficulty: HARD. Mix of medium and challenging vocabulary — think GRE-level words that educated adults might not immediately recognize. Avoid obvious words like telescope, biography, telephone.
 
-Good examples of the right level:
+Aim for this level (do NOT use these exact words as answers — they are only examples of the difficulty level):
 - Pusillanimous (pusill + anim + ous) — cowardly
 - Loquacious (loqu + acious) — talkative
 - Ephemeral (epi + hemer + al) — lasting a short time
 - Concatenate (con + caten + ate) — link together in a chain
-- Perspicacious (per + spic + acious) — having a ready insight`,
+- Perspicacious (per + spic + acious) — having a ready insight
+
+Choose 5 DIFFERENT words at this same level. Be creative — there are thousands of good options.`,
 }
 
 export async function generatePuzzles(difficulty: Difficulty): Promise<Puzzle[]> {
