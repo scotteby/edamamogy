@@ -185,130 +185,138 @@ export default function PracticePage() {
   const missingRoot = puzzle.roots[missingIndex]
 
   return (
-    <main className="min-h-screen flex flex-col items-center px-4 py-4" style={{ background: '#f5f7f2' }}>
-      <div className="w-full max-w-sm">
+    <main className="flex flex-col" style={{ background: '#f5f7f2', height: '100dvh' }}>
 
-        <div className="flex items-center justify-between mb-2">
-          <Link href="/" className="text-sm transition-colors" style={{ color: '#6b8f5e' }}>← back</Link>
-          <div className="flex items-center gap-2">
-            <span className="text-sm" style={{ color: '#6b8f5e' }}>Practice</span>
-            <div className="flex gap-1">
-              {(['easy', 'medium', 'hard'] as Difficulty[]).map(d => (
-                <button
-                  key={d}
-                  onClick={() => { if (d !== difficulty) setDifficulty(d) }}
-                  className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
-                    difficulty === d
-                      ? 'bg-[#3B6D11] text-[#EAF3DE]'
-                      : ''
-                  }`}
-                  style={difficulty !== d ? { border: '1px solid #d4e8c2', color: '#6b8f5e' } : undefined}
-                >
-                  {d}
-                </button>
-              ))}
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto px-4 pt-4 pb-4">
+        <div className="w-full max-w-sm mx-auto">
+
+          <div className="flex items-center justify-between mb-2">
+            <Link href="/" className="text-sm transition-colors" style={{ color: '#6b8f5e' }}>← back</Link>
+            <div className="flex items-center gap-2">
+              <span className="text-sm" style={{ color: '#6b8f5e' }}>Practice</span>
+              <div className="flex gap-1">
+                {(['easy', 'medium', 'hard'] as Difficulty[]).map(d => (
+                  <button
+                    key={d}
+                    onClick={() => { if (d !== difficulty) setDifficulty(d) }}
+                    className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
+                      difficulty === d
+                        ? 'bg-[#3B6D11] text-[#EAF3DE]'
+                        : ''
+                    }`}
+                    style={difficulty !== d ? { border: '1px solid #d4e8c2', color: '#6b8f5e' } : undefined}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="h-[3px] rounded-full my-2" style={{ background: '#d4e8c2' }}>
-          <div className="h-full bg-[#3B6D11] rounded-full transition-all duration-500"
-            style={{ width: `${(qi / puzzles.length) * 100}%` }} />
-        </div>
-
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-medium" style={{ color: '#3B6D11' }}>Word {qi + 1} / {puzzles.length}</span>
-          <ProgressDots total={PUZZLES_PER_DAY} current={qi} results={dotResults} />
-          {answersRevealed && <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />}
-        </div>
-
-        {/* Pod */}
-        <div className="mb-3">
-          <Pod
-            slots={puzzle.roots.map((r, i) =>
-              i === missingIndex && answerState !== 'correct' && answerState !== 'timeout' ? null : r
-            )}
-            totalSlots={puzzle.roots.length}
-            revealed={answerState === 'correct' || answerState === 'timeout'}
-            answer={puzzle.answer}
-            onRemove={() => {}}
-          />
-        </div>
-
-        {/* Clue card */}
-        <div className="rounded-2xl p-3 mb-2" style={{ background: '#fff', border: '1px solid #d4e8c2' }}>
-          <p className="text-sm uppercase tracking-wider mb-1" style={{ color: '#9db88a' }}>The missing root means...</p>
-          <p className="text-base" style={{ color: '#1a3a08' }}>{missingRoot.meaning}</p>
-          <p className="text-sm italic mt-0.5" style={{ color: '#9db88a' }}>{missingRoot.origin}</p>
-        </div>
-
-        {/* Hint */}
-        {answerState === 'unanswered' && (
-          <div className="mb-3">
-            {showHint ? (
-              <div className="bg-[#EAF3DE] border border-[#3B6D11]/20 rounded-xl px-3 py-2 fade-up">
-                <p className="text-sm text-[#27500A]">{puzzle.definition}</p>
-              </div>
-            ) : (
-              <button
-                onClick={() => setShowHint(true)}
-                className="text-xs transition-colors"
-                style={{ color: '#9db88a' }}
-              >
-                Show hint (definition)
-              </button>
-            )}
+          <div className="h-[3px] rounded-full my-2" style={{ background: '#d4e8c2' }}>
+            <div className="h-full bg-[#3B6D11] rounded-full transition-all duration-500"
+              style={{ width: `${(qi / puzzles.length) * 100}%` }} />
           </div>
-        )}
 
-        {/* Option beans */}
-        {answersRevealed && (
-          <div className="grid grid-cols-2 gap-2 mb-3">
-            {options.map(opt => {
-              const isCorrect = opt.id === missingRoot.id
-              const isChosen = opt.id === chosenId
-              const isAnswered = answerState !== 'unanswered'
-              let style: React.CSSProperties = { background: '#fff', border: '1.5px solid #d4e8c2' }
-              if (isAnswered && isCorrect) style = { background: '#EAF3DE', border: '1.5px solid #3B6D11' }
-              else if (isAnswered && isChosen && !isCorrect) style = { background: '#fff1f2', border: '1.5px solid #fca5a5' }
-              return (
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium" style={{ color: '#3B6D11' }}>Word {qi + 1} / {puzzles.length}</span>
+            <ProgressDots total={PUZZLES_PER_DAY} current={qi} results={dotResults} />
+            {answersRevealed && <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />}
+          </div>
+
+          {/* Pod */}
+          <div className="mb-3">
+            <Pod
+              slots={puzzle.roots.map((r, i) =>
+                i === missingIndex && answerState !== 'correct' && answerState !== 'timeout' ? null : r
+              )}
+              totalSlots={puzzle.roots.length}
+              revealed={answerState === 'correct' || answerState === 'timeout'}
+              answer={puzzle.answer}
+              onRemove={() => {}}
+            />
+          </div>
+
+          {/* Clue card */}
+          <div className="rounded-2xl p-3 mb-2" style={{ background: '#fff', border: '1px solid #d4e8c2' }}>
+            <p className="text-sm uppercase tracking-wider mb-1" style={{ color: '#9db88a' }}>The missing root means...</p>
+            <p className="text-base" style={{ color: '#1a3a08' }}>{missingRoot.meaning}</p>
+            <p className="text-sm italic mt-0.5" style={{ color: '#9db88a' }}>{missingRoot.origin}</p>
+          </div>
+
+          {/* Hint */}
+          {answerState === 'unanswered' && (
+            <div className="mb-3">
+              {showHint ? (
+                <div className="bg-[#EAF3DE] border border-[#3B6D11]/20 rounded-xl px-3 py-2 fade-up">
+                  <p className="text-sm text-[#27500A]">{puzzle.definition}</p>
+                </div>
+              ) : (
                 <button
-                  key={opt.id}
-                  onClick={() => selectOption(opt)}
-                  disabled={isAnswered}
-                  className="flex flex-col items-center p-3 rounded-2xl transition-all bean"
-                  style={style}
+                  onClick={() => setShowHint(true)}
+                  className="text-xs transition-colors"
+                  style={{ color: '#9db88a' }}
                 >
-                  <span className={`text-base font-medium ${isAnswered && isCorrect ? 'text-[#27500A]' : isAnswered && isChosen ? 'text-red-500' : ''}`}
-                    style={!isAnswered || (!isCorrect && !isChosen) ? { color: '#1a3a08' } : undefined}>
-                    {opt.text}
-                  </span>
+                  Show hint (definition)
                 </button>
-              )
-            })}
-          </div>
-        )}
+              )}
+            </div>
+          )}
 
-        {feedback && (
-          <p className={`text-sm text-center mb-2 fade-up ${answerState === 'correct' ? 'text-[#3B6D11]' : 'text-red-500'}`}>
-            {feedback}
-          </p>
-        )}
+          {/* Option beans */}
+          {answersRevealed && (
+            <div className="grid grid-cols-2 gap-2 mb-3">
+              {options.map(opt => {
+                const isCorrect = opt.id === missingRoot.id
+                const isChosen = opt.id === chosenId
+                const isAnswered = answerState !== 'unanswered'
+                let style: React.CSSProperties = { background: '#fff', border: '1.5px solid #d4e8c2' }
+                if (isAnswered && isCorrect) style = { background: '#EAF3DE', border: '1.5px solid #3B6D11' }
+                else if (isAnswered && isChosen && !isCorrect) style = { background: '#fff1f2', border: '1.5px solid #fca5a5' }
+                return (
+                  <button
+                    key={opt.id}
+                    onClick={() => selectOption(opt)}
+                    disabled={isAnswered}
+                    className="flex flex-col items-center p-3 rounded-2xl transition-all bean"
+                    style={style}
+                  >
+                    <span className={`text-base font-medium ${isAnswered && isCorrect ? 'text-[#27500A]' : isAnswered && isChosen ? 'text-red-500' : ''}`}
+                      style={!isAnswered || (!isCorrect && !isChosen) ? { color: '#1a3a08' } : undefined}>
+                      {opt.text}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          )}
 
-        {(answerState === 'correct' || answerState === 'wrong' || answerState === 'timeout') && (
-          <div className="mb-3">
+          {feedback && (
+            <p className={`text-sm text-center mb-2 fade-up ${answerState === 'correct' ? 'text-[#3B6D11]' : 'text-red-500'}`}>
+              {feedback}
+            </p>
+          )}
+
+          {(answerState === 'correct' || answerState === 'wrong' || answerState === 'timeout') && (
             <EtymologyCard fact={puzzle.etymologyFact} answer={puzzle.answer} />
-          </div>
-        )}
+          )}
 
-        {answerState !== 'unanswered' && (
-          <button onClick={nextPuzzle}
-            className="w-full py-3 bg-[#3B6D11] hover:bg-[#27500A] text-[#EAF3DE] rounded-xl text-sm font-medium transition-colors">
-            {qi + 1 >= puzzles.length ? 'See results →' : 'Next word →'}
-          </button>
-        )}
-
+        </div>
       </div>
+
+      {/* Sticky next button */}
+      {answerState !== 'unanswered' && (
+        <div className="px-4 pt-3 pb-8" style={{ background: '#f5f7f2', borderTop: '1px solid #e8f3dc' }}>
+          <div className="w-full max-w-sm mx-auto">
+            <button onClick={nextPuzzle}
+              className="w-full py-3 bg-[#3B6D11] hover:bg-[#27500A] text-[#EAF3DE] rounded-xl text-sm font-medium transition-colors">
+              {qi + 1 >= puzzles.length ? 'See results →' : 'Next word →'}
+            </button>
+          </div>
+        </div>
+      )}
+
     </main>
   )
 }
