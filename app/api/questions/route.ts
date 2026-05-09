@@ -54,7 +54,7 @@ export async function GET(request: Request) {
     const param = url.searchParams.get('difficulty')
     const difficulty: Difficulty =
       param === 'easy' || param === 'hard' ? param : 'medium'
-    const useCache = difficulty === 'medium'
+    const useCache = param === null
 
     const { data: existing } = await supabase
       .from('edamamogy_highscores')
