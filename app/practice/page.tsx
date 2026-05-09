@@ -255,7 +255,7 @@ export default function PracticePage() {
               ) : (
                 <button
                   onClick={() => setShowHint(true)}
-                  className="w-full text-sm text-center transition-colors"
+                  className="w-full text-base text-center transition-colors"
                   style={{ color: '#9db88a' }}
                 >
                   Show hint (definition)
