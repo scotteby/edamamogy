@@ -16,7 +16,6 @@ const CX: Record<number, number[]> = {
 
 export default function Pod({ slots, totalSlots, revealed, answer, onRemove }: PodProps) {
   const cx = CX[totalSlots] || CX[3]
-  const height = 100
 
   return (
     <div className="flex flex-col items-center gap-2">
@@ -48,8 +47,8 @@ export default function Pod({ slots, totalSlots, revealed, answer, onRemove }: P
               <ellipse
                 cx={x}
                 cy={50}
-                rx={totalSlots === 2 ? 42 : 36}
-                ry={30}
+                rx={totalSlots === 2 ? 36 : 30}
+                ry={totalSlots === 2 ? 36 : 30}
                 fill={filled ? '#27500A' : '#131f0a'}
                 stroke={filled ? '#3B6D11' : '#2a5a0a'}
                 strokeWidth="1"
