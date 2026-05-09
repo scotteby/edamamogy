@@ -23,6 +23,7 @@ export default function GamePage() {
   const [feedback, setFeedback] = useState('')
   const [timerRunning, setTimerRunning] = useState(false)
   const [timerKey, setTimerKey] = useState(0)
+  const [answersRevealed, setAnswersRevealed] = useState(false)
   const [timeUsed, setTimeUsed] = useState(0)
   const [results, setResults] = useState<GameResult[]>([])
   const [dotResults, setDotResults] = useState<(boolean | null)[]>(Array(PUZZLES_PER_DAY).fill(null))
@@ -35,6 +36,15 @@ export default function GamePage() {
   const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
   useEffect(() => { loadGame() }, [])
+
+  useEffect(() => {
+    if (!timerKey) return
+    const timer = setTimeout(() => {
+      setAnswersRevealed(true)
+      setTimerRunning(true)
+    }, 3000)
+    return () => clearTimeout(timer)
+  }, [timerKey])
 
 async function loadGame() {
   try {
@@ -72,7 +82,8 @@ async function loadGame() {
     setUsedIds(new Set())
     setAnswerState('unanswered')
     setFeedback('')
-    setTimerRunning(true)
+    setAnswersRevealed(false)
+    setTimerRunning(false)
     setTimerKey(k => k + 1)
     startTimeRef.current = Date.now()
   }
@@ -227,7 +238,7 @@ async function loadGame() {
         <div className="flex items-center justify-between mb-4">
           <span className="text-xs text-[#3B6D11] font-medium">Word {qi + 1} / {puzzles.length}</span>
           <ProgressDots total={PUZZLES_PER_DAY} current={qi} results={dotResults} />
-          <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />
+          {answersRevealed && <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />}
         </div>
 
         {/* Definition card */}
@@ -250,7 +261,7 @@ async function loadGame() {
         </div>
 
         {/* Beans tray */}
-        {answerState === 'unanswered' && (
+        {answerState === 'unanswered' && answersRevealed && (
           <div className="mb-4">
             <p className="text-xs text-gray-600 uppercase tracking-wider mb-2">Available roots</p>
             <div className="flex flex-wrap gap-2">

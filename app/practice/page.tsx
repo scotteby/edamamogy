@@ -18,6 +18,7 @@ export default function PracticePage() {
   const [feedback, setFeedback] = useState('')
   const [timerRunning, setTimerRunning] = useState(false)
   const [timerKey, setTimerKey] = useState(0)
+  const [answersRevealed, setAnswersRevealed] = useState(false)
   const [results, setResults] = useState<{ correct: boolean; pts: number }[]>([])
   const [dotResults, setDotResults] = useState<(boolean | null)[]>(Array(PUZZLES_PER_DAY).fill(null))
   const [totalScore, setTotalScore] = useState(0)
@@ -28,6 +29,15 @@ export default function PracticePage() {
   const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
   useEffect(() => { loadPuzzles() }, [])
+
+  useEffect(() => {
+    if (!timerKey) return
+    const timer = setTimeout(() => {
+      setAnswersRevealed(true)
+      setTimerRunning(true)
+    }, 3000)
+    return () => clearTimeout(timer)
+  }, [timerKey])
 
   async function loadPuzzles() {
     const res = await fetch('/api/questions')
@@ -51,7 +61,8 @@ export default function PracticePage() {
     setAnswerState('unanswered')
     setChosenId(null)
     setFeedback('')
-    setTimerRunning(true)
+    setAnswersRevealed(false)
+    setTimerRunning(false)
     setTimerKey(k => k + 1)
     startTimeRef.current = Date.now()
   }
@@ -182,7 +193,7 @@ export default function PracticePage() {
         <div className="flex items-center justify-between mb-4">
           <span className="text-xs text-[#3B6D11] font-medium">Word {qi + 1} / {puzzles.length}</span>
           <ProgressDots total={PUZZLES_PER_DAY} current={qi} results={dotResults} />
-          <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />
+          {answersRevealed && <Timer maxTime={MAX_TIME} running={timerRunning} onExpire={handleTimerExpire} resetKey={timerKey} />}
         </div>
 
         {/* Pod display — show assembled word with blank */}
@@ -230,28 +241,30 @@ export default function PracticePage() {
         </div>
 
         {/* Option beans */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          {options.map(opt => {
-            const isCorrect = opt.id === missingRoot.id
-            const isChosen = opt.id === chosenId
-            const isAnswered = answerState !== 'unanswered'
-            let cls = 'bg-[#161d2e] border-white/10'
-            if (isAnswered && isCorrect) cls = 'bg-[#1a2e0a] border-[#3B6D11]'
-            else if (isAnswered && isChosen && !isCorrect) cls = 'bg-red-900/20 border-red-500/50'
-            return (
-              <button
-                key={opt.id}
-                onClick={() => selectOption(opt)}
-                disabled={isAnswered}
-                className={`flex flex-col items-center p-4 rounded-2xl border-[1.5px] transition-all bean ${cls} ${!isAnswered ? 'hover:border-[#3B6D11]/60 hover:bg-[#1a2e0a]/40' : ''}`}
-              >
-                <span className={`text-base font-medium ${isAnswered && isCorrect ? 'text-[#97C459]' : isAnswered && isChosen ? 'text-red-400' : 'text-white'}`}>
-                  {opt.text}
-                </span>
-              </button>
-            )
-          })}
-        </div>
+        {answersRevealed && (
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            {options.map(opt => {
+              const isCorrect = opt.id === missingRoot.id
+              const isChosen = opt.id === chosenId
+              const isAnswered = answerState !== 'unanswered'
+              let cls = 'bg-[#161d2e] border-white/10'
+              if (isAnswered && isCorrect) cls = 'bg-[#1a2e0a] border-[#3B6D11]'
+              else if (isAnswered && isChosen && !isCorrect) cls = 'bg-red-900/20 border-red-500/50'
+              return (
+                <button
+                  key={opt.id}
+                  onClick={() => selectOption(opt)}
+                  disabled={isAnswered}
+                  className={`flex flex-col items-center p-4 rounded-2xl border-[1.5px] transition-all bean ${cls} ${!isAnswered ? 'hover:border-[#3B6D11]/60 hover:bg-[#1a2e0a]/40' : ''}`}
+                >
+                  <span className={`text-base font-medium ${isAnswered && isCorrect ? 'text-[#97C459]' : isAnswered && isChosen ? 'text-red-400' : 'text-white'}`}>
+                    {opt.text}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        )}
 
         {feedback && (
           <p className={`text-sm text-center mb-3 fade-up ${answerState === 'correct' ? 'text-[#97C459]' : 'text-red-400'}`}>
