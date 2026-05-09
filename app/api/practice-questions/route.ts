@@ -37,20 +37,32 @@ export async function GET(request: Request) {
       return NextResponse.json({ puzzles: data.puzzles, source: 'pool' })
     }
 
-    // Pool empty — generate on the fly, avoiding recently used words
-    try {
-      const { data: recentRows } = await supabase
+    // Pool exhausted — reset all rows and serve the oldest one
+    await supabase
+      .from('practice_puzzles')
+      .update({ used: false })
+      .eq('difficulty', difficulty)
+
+    const { data: resetData } = await supabase
+      .from('practice_puzzles')
+      .select('id, puzzles')
+      .eq('difficulty', difficulty)
+      .order('created_at', { ascending: true })
+      .limit(1)
+      .maybeSingle()
+
+    if (resetData) {
+      await supabase
         .from('practice_puzzles')
-        .select('puzzles')
-        .eq('difficulty', difficulty)
-        .order('created_at', { ascending: false })
-        .limit(5)
+        .update({ used: true })
+        .eq('id', resetData.id)
 
-      const excludeWords = (recentRows ?? []).flatMap((row: any) =>
-        (row.puzzles as any[]).map((p: any) => p.answer)
-      )
+      return NextResponse.json({ puzzles: resetData.puzzles, source: 'pool-reset' })
+    }
 
-      const puzzles = await generatePuzzles(difficulty, excludeWords)
+    // No rows at all — generate on the fly
+    try {
+      const puzzles = await generatePuzzles(difficulty)
       return NextResponse.json({ puzzles, source: 'live' })
     } catch {
       return NextResponse.json({ puzzles: SAMPLE_PUZZLES, source: 'sample' })
